@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affaan | Portfolio</title>
+  <style>
+    * { scroll-behavior: smooth; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #333; }
+
+    /* Header */
+    header { background: #0d1b2a; color: white; text-align: center; padding: 3rem 1rem; }
+    header img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 1rem; animation: fadeIn 1.5s ease; }
+    header h1 { font-size: 2.5rem; margin: 0; animation: fadeInDown 1.2s ease; }
+    header p { font-size: 1.2rem; color: #ddd; animation: fadeInUp 1.2s ease; }
+    nav { margin-top: 1rem; }
+    nav a { margin: 0 15px; color: #fff; text-decoration: none; font-weight: bold; transition: color 0.3s; }
+    nav a:hover { color: #00b4d8; }
+
+    /* Sections */
+    section { padding: 3rem 1rem; max-width: 1000px; margin: auto; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+    section.visible { opacity: 1; transform: translateY(0); }
+    h2 { color: #0d1b2a; margin-bottom: 1rem; text-align: center; }
+
+    /* Cards */
+    .skills, .projects, .education { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    .card { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .card h3 { margin-top: 0; }
+    .icon { font-size: 40px; margin-bottom: 10px; }
+
+    /* Footer */
+    footer { background: #0d1b2a; color: white; text-align: center; padding: 1rem; margin-top: 2rem; }
+    footer a { color: #fff; text-decoration: none; }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <img src="profile.jpg" alt="Affaan Profile">
+    <h1>Hi, I'm Affaan</h1>
+    <p>Aspiring Computer Science Student</p>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- About -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I'm <b>Affaan</b>, an aspiring Computer Science student currently in 12th grade. 
+       Passionate about programming, problem-solving, and building creative projects. 
+       Always eager to learn and explore new technologies!</p>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills">
+      <div class="card">
+        <div class="icon">🐍</div>
+        <h3>Python</h3>
+        <p>Proficient in Python programming and building projects like games and tools.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🛢️</div>
+        <h3>MySQL</h3>
+        <p>Skilled in database design and queries using MySQL.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🎨</div>
+        <h3>Blender</h3>
+        <p>Basic 3D modeling and animation with Blender.</p>
+      </div>
+      <div class="card">
+        <div class="icon">💻</div>
+        <h3>CSS</h3>
+        <p>Good knowledge of CSS for styling and responsive design.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education">
+    <h2>Education</h2>
+    <div class="education">
+      <div class="card">
+        <h3>12th Grade</h3>
+        <p>Currently pursuing 12th in Computer Science stream.</p>
+      </div>
+      <div class="card">
+        <h3>10th Grade</h3>
+        <p>Completed with <b>86%</b> marks.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="projects">
+      <div class="card">
+        <h3>Snake Game (Python)</h3>
+        <p>Built a fun Snake Game using Python and Pygame library.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📧 Email me at: <a href="mailto:affaan@example.com">affaan@example.com</a></p>
+    <p>🌐 Connect with me on <a href="#">LinkedIn</a> | <a href="#">GitHub</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Affaan | Made with ❤️</p>
+  </footer>
+
+  <!-- JavaScript for fade-in on scroll -->
+  <script>
+    const sections = document.querySelectorAll("section");
+    window.addEventListener("scroll", () => {
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          sec.classList.add("visible");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
