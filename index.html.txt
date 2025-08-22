@@ -1,152 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Affaan | Portfolio</title>
-  <style>
-    * { scroll-behavior: smooth; }
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #333; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affaan's Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    /* Header */
-    header { background: #0d1b2a; color: white; text-align: center; padding: 3rem 1rem; }
-    header img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid white; margin-bottom: 1rem; animation: fadeIn 1.5s ease; }
-    header h1 { font-size: 2.5rem; margin: 0; animation: fadeInDown 1.2s ease; }
-    header p { font-size: 1.2rem; color: #ddd; animation: fadeInUp 1.2s ease; }
-    nav { margin-top: 1rem; }
-    nav a { margin: 0 15px; color: #fff; text-decoration: none; font-weight: bold; transition: color 0.3s; }
-    nav a:hover { color: #00b4d8; }
+        :root {
+            --bg-color: #1a1a2e;
+            --secondary-bg: #16213e;
+            --text-color: #f0f0f0;
+            --accent-color: #4cc9f0;
+            --menu-bg: #0f3460;
+            --card-bg: rgba(255, 255, 255, 0.08);
+        }
 
-    /* Sections */
-    section { padding: 3rem 1rem; max-width: 1000px; margin: auto; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
-    section.visible { opacity: 1; transform: translateY(0); }
-    h2 { color: #0d1b2a; margin-bottom: 1rem; text-align: center; }
+        body {
+            background: linear-gradient(135deg, var(--bg-color), var(--secondary-bg));
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            background-attachment: fixed;
+        }
 
-    /* Cards */
-    .skills, .projects, .education { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-    .card { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
-    .card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-    .card h3 { margin-top: 0; }
-    .icon { font-size: 40px; margin-bottom: 10px; }
+        /* Left Vertical Menu */
+        .menu {
+            width: 80px;
+            background: var(--menu-bg);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+            z-index: 100;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+        }
 
-    /* Footer */
-    footer { background: #0d1b2a; color: white; text-align: center; padding: 1rem; margin-top: 2rem; }
-    footer a { color: #fff; text-decoration: none; }
+        .menu-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            font-weight: bold;
+            font-size: 20px;
+        }
 
-    /* Animations */
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
+        .menu-item {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #aaa;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-color);
+        }
+
+        .menu-item.active {
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .menu-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .menu-text {
+            font-size: 12px;
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            margin-left: 80px;
+            padding: 40px;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 40px 0;
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* Home Section */
+        .home-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .home-text {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 30px;
+        }
+
+        .home-title {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .home-subtitle {
+            font-size: 24px;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+        }
+
+        .home-desc {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+
+        .home-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--accent-color);
+            box-shadow: 0 0 30px rgba(76, 201, 240, 0.5);
+        }
+
+        /* About Section */
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-desc {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .about-skills {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .skill-title {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .skill-progress {
+            height: 100%;
+            border-radius: 5px;
+            background: var(--accent-color);
+            position: relative;
+        }
+
+        .skill-name {
+            position: absolute;
+            right: 0;
+            top: -25px;
+            font-size: 14px;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 20px;
+        }
+
+        .project-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Education Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--accent-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            margin-bottom: 10px;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--bg-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu {
+                width: 60px;
+            }
+            
+            .content {
+                margin-left: 60px;
+                padding: 20px;
+            }
+            
+            .home-title {
+                font-size: 36px;
+            }
+            
+            .home-subtitle {
+                font-size: 20px;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <img src="profile.jpg" alt="Affaan Profile">
-    <h1>Hi, I'm Affaan</h1>
-    <p>Aspiring Computer Science Student</p>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#education">Education</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <!-- About -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>I'm <b>Affaan</b>, an aspiring Computer Science student currently in 12th grade. 
-       Passionate about programming, problem-solving, and building creative projects. 
-       Always eager to learn and explore new technologies!</p>
-  </section>
-
-  <!-- Skills -->
-  <section id="skills">
-    <h2>Skills</h2>
-    <div class="skills">
-      <div class="card">
-        <div class="icon">🐍</div>
-        <h3>Python</h3>
-        <p>Proficient in Python programming and building projects like games and tools.</p>
-      </div>
-      <div class="card">
-        <div class="icon">🛢️</div>
-        <h3>MySQL</h3>
-        <p>Skilled in database design and queries using MySQL.</p>
-      </div>
-      <div class="card">
-        <div class="icon">🎨</div>
-        <h3>Blender</h3>
-        <p>Basic 3D modeling and animation with Blender.</p>
-      </div>
-      <div class="card">
-        <div class="icon">💻</div>
-        <h3>CSS</h3>
-        <p>Good knowledge of CSS for styling and responsive design.</p>
-      </div>
+    <!-- Left Vertical Menu -->
+    <div class="menu">
+        <div class="menu-logo">A</div>
+        <div class="menu-item active" data-target="home">
+            <div class="menu-icon"><i class="fas fa-home"></i></div>
+            <div class="menu-text">Home</div>
+        </div>
+        <div class="menu-item" data-target="about">
+            <div class="menu-icon"><i class="fas fa-user"></i></div>
+            <div class="menu-text">About</div>
+        </div>
+        <div class="menu-item" data-target="projects">
+            <div class="menu-icon"><i class="fas fa-code"></i></div>
+            <div class="menu-text">Projects</div>
+        </div>
+        <div class="menu-item" data-target="education">
+            <div class="menu-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="menu-text">Education</div>
+        </div>
+        <div class="menu-item" data-target="contact">
+            <div class="menu-icon"><i class="fas fa-envelope"></i></div>
+            <div class="menu-text">Contact</div>
+        </div>
     </div>
-  </section>
 
-  <!-- Education -->
-  <section id="education">
-    <h2>Education</h2>
-    <div class="education">
-      <div class="card">
-        <h3>12th Grade</h3>
-        <p>Currently pursuing 12th in Computer Science stream.</p>
-      </div>
-      <div class="card">
-        <h3>10th Grade</h3>
-        <p>Completed with <b>86%</b> marks.</p>
-      </div>
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Home Section -->
+        <section id="home" class="active">
+            <div class="home-content">
+                <div class="home-text">
+                    <h1 class="home-title">Hi, I'm <span style="color: var(--accent-color);">Affaan</span></h1>
+                    <h2 class="home-subtitle">3D Artist & Python Developer</h2>
+                    <p class="home-desc">
+                        I'm a passionate 3D artist specializing in Blender and a Python developer with experience in creating interactive GUI applications. I love bringing ideas to life through both visual art and functional code.
+                    </p>
+                    <a href="#contact" class="home-btn">Get In Touch</a>
+                </div>
+                <div class="home-image">
+                    <img src="https://images.unsplash.com/photo-1618073193730-8afc6b3b3781?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Profile" class="profile-img">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-desc">
+                        I am a creative student with expertise in 3D modeling and Python programming. With experience in Blender, I create stunning visual artwork and animations.
+                    </p>
+                    <p class="about-desc">
+                        On the programming side, I develop practical applications using Python and Tkinter for GUI development. My projects include calculators, games, and utility applications.
+                    </p>
+                    <p class="about-desc">
+                        I'm constantly learning new techniques and expanding my skill set to stay at the forefront of both 3D art and software development.
+                    </p>
+                </div>
+                <div class="about-skills">
+                    <h3 class="skill-title">My Skills</h3>
+                    <div class="skill">
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%;">
+                                <span class="skill-name">85%</span>
+                            </div>
+                        </div>
+                        <p>Blender 3D</p>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%;">
+                                <span class="skill-name">80%</span>
+                            </div>
+                        </div>
+                        <p>Python Programming</p>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 75%;">
+                                <span class="skill-name">75%</span>
+                            </div>
+                        </div>
+                        <p>Tkinter GUI</p>
+                    </div>
+                    <div class="skill">
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 70%;">
+                                <span class="skill-name">70%</span>
+                            </div>
+                        </div>
+                        <p>Web Development</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80" alt="Blender Project" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Blender 3D Art</h3>
+                        <p class="project-desc">A collection of my 3D artwork created in Blender, including character designs, environments, and animations.</p>
+                        <a href="https://www.blender.org" target="_blank" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80" alt="Python Calculator" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Python Calculator</h3>
+                        <p class="project-desc">A fully functional calculator application built with Python and Tkinter with a clean and intuitive GUI.</p>
+                        <a href="https://github.com/example/python-calculator" target="_blank" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Snake Game" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Snake Game</h3>
+                        <p class="project-desc">A classic snake game implemented in Python using Tkinter for the graphical user interface.</p>
+                        <a href="https://github.com/example/snake-game" target="_blank" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://images.unsplash.com/photo-1581276879432-15e50529f34b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="JavaScript Calculator" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">JavaScript Calculator</h3>
+                        <p class="project-desc">A responsive calculator built with HTML, CSS, and JavaScript with advanced functionality.</p>
+                        <a href="https://github.com/example/js-calculator" target="_blank" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education">
+            <h2 class="section-title">Education</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2023 - Present</div>
+                        <h3 class="timeline-title">12th Grade - Computer Science</h3>
+                        <p>Currently studying in Computer Science stream</p>
+                        <p>Focusing on programming, computer fundamentals, and mathematics</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024 - 2025</div>
+                        <h3 class="timeline-title">10th Grade</h3>
+                        <p>Completed with 86% overall Mathematics 93% and Science=90% </p>
+                        <p>Developed interest in programming and 3D modeling during this time</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2022 - 2023</div>
+                        <h3 class="timeline-title">Blender Certification</h3>
+                        <p>Online Courses & Self-Taught</p>
+                        <p>Advanced 3D modeling, texturing, and animation techniques</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2 class="section-title">Contact Me</h2>
+            <div class="contact-content">
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Subject">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-input" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="home-btn">Send Message</button>
+                </form>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3>Location</h3>
+                            <p>Mumbai, India</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3>Email</h3>
+                            <p>affaan20071120@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-discord"></i>
+                        </div>
+                        <div>
+                            <h3>Discord</h3>
+                            <p>Dragongmaing11</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-  </section>
 
-  <!-- Projects -->
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="projects">
-      <div class="card">
-        <h3>Snake Game (Python)</h3>
-        <p>Built a fun Snake Game using Python and Pygame library.</p>
-      </div>
-    </div>
-  </section>
+    <script>
+        // Menu navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items and sections
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
 
-  <!-- Contact -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>📧 Email me at: <a href="mailto:affaan@example.com">affaan@example.com</a></p>
-    <p>🌐 Connect with me on <a href="#">LinkedIn</a> | <a href="#">GitHub</a></p>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Affaan | Made with ❤️</p>
-  </footer>
-
-  <!-- JavaScript for fade-in on scroll -->
-  <script>
-    const sections = document.querySelectorAll("section");
-    window.addEventListener("scroll", () => {
-      sections.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-          sec.classList.add("visible");
-        }
-      });
-    });
-  </script>
+        // Smooth scrolling for home button
+        document.querySelector('.home-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            
+            document.querySelector('.menu-item[data-target="contact"]').classList.add('active');
+            document.getElementById('contact').classList.add('active');
+        });
+    </script>
 </body>
 </html>
