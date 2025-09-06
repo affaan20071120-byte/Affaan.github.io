@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Affaan — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#0b0f2a; --bg2:#2b0d3a;
+  --text:#e7e8ee; --muted:#b7bbd0;
+  --line: rgba(255,255,255,0.12);
+  --card: rgba(255,255,255,0.05);
+  --accent:#ff2b45; --accent2:#3aa0ff;
+}
+*{ box-sizing:border-box }
+html{ scroll-behavior:smooth }
+body{
+  margin:0;
+  font-family:Poppins,system-ui,Arial;
+  color:var(--text);
+  background: radial-gradient(1200px 800px at 20% 10%, rgba(255,60,80,0.10), transparent 70%),
+              radial-gradient(1000px 700px at 80% 30%, rgba(58,160,255,0.12), transparent 70%),
+              linear-gradient(180deg, var(--bg1), var(--bg2));
+  min-height:100vh;
+  overflow-x:hidden;
+}
+#stars{ position:fixed; inset:0; z-index:-1 }
+header{ text-align:center; padding:56px 16px 8px }
+h1{
+  margin:0;
+  font-size: clamp(28px,5.5vw,64px);
+  font-weight:800;
+  color: var(--text);
+  text-shadow: 0 0 8px rgba(255,43,69,0.7), 0 0 18px rgba(255,43,69,0.5), 0 0 36px rgba(58,160,255,0.3);
+  -webkit-text-stroke: 1px rgba(255,43,69,0.3);
+}
+section{ padding:28px 16px; display:flex; justify-content:center }
+.box{
+  width:min(1100px, 92vw);
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  backdrop-filter: blur(6px);
+}
+.box h2{ margin: 4px 0 12px; font-size: clamp(22px,3vw,32px) }
+.muted{ color:var(--muted) }
+/* Hamburger */
+nav{ position:sticky; top:8px; display:flex; justify-content:center }
+.navwrap{ width:min(1100px,92vw); display:flex; gap:10px; align-items:center }
+#hamburger{
+  width:46px; height:42px; border-radius:12px; border:1px solid var(--line); background:var(--card);
+  display:flex; flex-direction:column; gap:6px; align-items:center; justify-content:center; cursor:pointer;
+  box-shadow: 0 0 14px rgba(255,43,69,0.35), 0 0 22px rgba(58,160,255,0.25);
+}
+#hamburger span{ width:60%; height:3px; background:var(--text); border-radius:2px }
+#menu{ display:none; gap:10px; flex-wrap:wrap; padding:8px 10px; border:1px solid var(--line); border-radius:12px; background:var(--card) }
+#menu a{ color:var(--text); text-decoration:none; padding:8px 12px; border-radius:10px; border:1px solid transparent }
+#menu a:hover{ border-color:var(--line); box-shadow: 0 0 10px rgba(255,43,69,0.35), 0 0 18px rgba(58,160,255,0.25) }
+/* Cards */
+.col{ display:flex; flex-direction:column; gap:14px; align-items:center }
+.card{
+  width:min(860px,100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+  border:1px solid var(--line);
+  border-radius:16px; padding:18px; text-decoration:none; color:var(--text);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  position:relative;
+}
+.card:hover{ transform: translateY(-3px); border-color: rgba(255,43,69,0.5);
+  box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
+.btn{ position:absolute; right:14px; bottom:12px; font-size:12px; opacity:.85; padding:6px 10px; border-radius:10px; border:1px solid var(--line) }
+.logoSVG{ width:38px; height:38px; flex:0 0 auto; filter: drop-shadow(0 0 8px rgba(255,255,255,0.35)); }
+.titleFlex{ display:flex; align-items:center; gap:10px; margin:0 0 6px; }
+.pulse { animation: pulse 2.2s ease-in-out infinite; }
+@keyframes pulse {
+  0%,100%{ filter: drop-shadow(0 0 6px rgba(255,255,255,.25)); transform: translateZ(0) scale(1); }
+  50%{ filter: drop-shadow(0 0 14px rgba(255,43,69,.45)) drop-shadow(0 0 18px rgba(58,160,255,.35)); transform: scale(1.04); }
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<header>
+<h1> Hi,I am Mohammed Affaan Delvi</h1>
+</header>
+
+<nav>
+<div class="navwrap">
+<button id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+<div id="menu">
+<a href="#about">About Me</a>
+<a href="#skills">Skills</a>
+<a href="#projects">Projects</a>
+<a href="#education">Education</a>
+</div>
+</div>
+</nav>
+
+<section id="about">
+<div class="box">
+<h2>About Me</h2>
+<p class="muted">
+<strong> I’m Mohammed Affaan Delvi — an aspiring Computer Science student who loves coding, problem‑solving and turning ideas into beautiful, working products. I focus on learning fast, building real projects, and improving every day. I love learning more languages and currently I am 18 years old. </strong></p>
+</p>
+</div>
+</section>
+
+<section id="skills">
+<div class="box">
+<h2>Skills</h2>
+<div class="col">
+
+<!-- Python -->
+<a class="card" href="https://www.python.org/" target="_blank" rel="noopener">
+<h3 class="titleFlex">
+<img class="logoSVG" src="https://raw.githubusercontent.com/github/explore/main/topics/python/python.png" alt="Python Logo">
+<span>Python</span>
+</h3>
+<p class="muted"><strong>I have been using Python for 4 years and I have a strong foundation in python with this python I have made 2 projects.Its fun to code with Python.</strong></p>
+</a>
+
+<!-- MySQL -->
+<a class="card" href="https://www.mysql.com/" target="_blank" rel="noopener">
+<h3 class="titleFlex">
+<img class="logoSVG" src="https://raw.githubusercontent.com/github/explore/main/topics/mysql/mysql.png" alt="MySQL Logo">
+<span>MySQL</span>
+</h3>
+<p class="muted"><strong>I started learning MySQL in Grade 12 and I have learned to make database based on this and also an interesting fact about this language is that we can connect it with python using mysql-connector from cmd.</strong></p>
+</a>
+
+<!-- Blender -->
+<a class="card" href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener">
+<h3 class="titleFlex">
+<img class="logoSVG" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Blender_logo_no_text.svg" alt="Blender Logo">
+<span>Blender</span>
+</h3>
+<p class="muted"><strong>I have been using Blender for 6 month and I am still procceding with this language.It's good for making 3D models. </strong></p>
+</a>
+
+<!-- CSS3 -->
+<a class="card" href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener">
+<h3 class="titleFlex">
+<img class="logoSVG" src="https://upload.wikimedia.org/wikipedia/commons/6/62/CSS3_logo.svg" alt="CSS3 Logo">
+<span>CSS3</span>
+</h3>
+<p class="muted"><strong>I just started learning this now and have already become well used to this programming language. I have undertand its basics and further going learn more in CSS3. </strong></p>
+</a>
+
+<!-- HTML -->
+<a class="card" href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener">
+<h3 class="titleFlex">
+<img class="logoSVG" src="https://raw.githubusercontent.com/github/explore/main/topics/html/html.png" alt="HTML Logo">
+<span>HTML</span>
+</h3>
+<p class="muted"><strong>I have started learning HTML since Grade 8 and building structured web pages. I have a strong foundation in HTML.</strong></p>
+</a>
+
+</div>
+</div>
+</section>
+
+<!-- Projects (MAIN BOX) -->
+  <section id="projects">
+    <div class="box">
+      <h2>Projects</h2>
+      <div class="col">
+        <a class="card" href="snake.html" target="_blank" rel="noopener">
+          <h3 class="titleFlex">
+<svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+  <path fill="#2ecc71" d="M14 40c0-10 8-18 18-18h6c4 0 6-2 6-6s-2-6-6-6h-8c-2 0-2-4 0-4h10c8 0 14 6 14 14s-6 14-14 14h-8c-4 0-6 2-6 6s2 6 6 6h18c2 0 2 4 0 4H30c-10 0-16-6-16-14z"/>
+  <circle cx="35" cy="14" r="2" fill="#000"/>
+</svg>
+<span>Snake Game</span></h3>
+          <p class="muted">Modern glowing snake with score counter and smooth controls.</p>
+          <span class="btn">Open in new tab</span>
+        </a>
+        <a class="card" href="calc.html" target="_blank" rel="noopener">
+          <h3 class="titleFlex">
+<svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+  <rect x="10" y="6" width="44" height="52" rx="6" ry="6" fill="#111827" stroke="#6b7280" stroke-width="2"/>
+  <rect x="16" y="10" width="32" height="10" rx="2" fill="#1f2937"/>
+  <g fill="#e5e7eb">
+    <rect x="16" y="24" width="10" height="10" rx="2"/>
+    <rect x="28" y="24" width="10" height="10" rx="2"/>
+    <rect x="40" y="24" width="10" height="10" rx="2"/>
+    <rect x="16" y="36" width="10" height="10" rx="2"/>
+    <rect x="28" y="36" width="10" height="10" rx="2"/>
+    <rect x="40" y="36" width="10" height="10" rx="2"/>
+    <rect x="16" y="48" width="22" height="10" rx="2"/>
+    <rect x="40" y="48" width="10" height="10" rx="2"/>
+  </g>
+</svg>
+<span>Scientific Calculator</span></h3>
+          <p class="muted">Neon-styled calculator with basic &amp; scientific functions.</p>
+          <span class="btn">Open in new tab</span>
+        </a>
+        <a class="card" href="coming-soon.html" target="_blank" rel="noopener">
+          <h3 class="titleFlex">
+<svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+  <path fill="#60a5fa" d="M44 6c6 6 10 14 10 22s-4 16-10 22l-8-8 8-8c2-4 2-8 0-12l-8-8 8-8z"/>
+  <path fill="#93c5fd" d="M36 50l-8-8-10 2-2 10 10-2 2-10 8 8z"/>
+  <circle cx="44" cy="20" r="6" fill="#1f2937"/>
+</svg>
+<span>Upcoming Projects</span></h3>
+          <p class="muted">More exciting projects are coming soon…</p>
+          <span class="btn">Open in new tab</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+<section id="education">
+<div class="box">
+<h2>Education</h2>
+<p class="muted">
+<strong> Overall Class 10 (CBSE): 86%</strong> (<strong> Maths: 93%</strong>,<strong> Science: 90%</strong>)<strong> — Currently pursuing Grade 12 (CBSE)</strong>.</p>
+</div>
+</section>
+
+<footer>© <span id="year"></span> Mohammed Affaan Delvi. Built with Passion & Dedication ⚡🐉</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const hb = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+hb.addEventListener('click', ()=>{
+  menu.style.display = (menu.style.display==='flex') ? 'none' : 'flex';
+});
+
+const c = document.getElementById('stars');
+const ctx = c.getContext('2d');
+let stars = [];
+function resize(){
+  c.width = innerWidth; c.height = innerHeight;
+  stars = Array.from({length:180}, ()=> ({ x: Math.random()*c.width, y: Math.random()*c.height, z: Math.random()*0.7+0.3, t: Math.random()*Math.PI*2 }));
+}
+addEventListener('resize', resize); resize();
+function draw(){
+  ctx.clearRect(0,0,c.width,c.height);
+  for(const s of stars){
+    s.t += 0.03;
+    s.x += (Math.random()-0.5)*0.2*s.z;
+    s.y += (Math.random()-0.5)*0.2*s.z;
+    if (s.x<0) s.x=c.width; if (s.x>c.width) s.x=0;
+    if (s.y<0) s.y=c.height; if (s.y>c.height) s.y=0;
+    const r = 0.6 + 1.6*s.z + Math.sin(s.t)*0.3;
+    const g = ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,r*6);
+    g.addColorStop(0,'rgba(255,255,255,0.9)');
+    g.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(s.x,s.y,r,0,Math.PI*2); ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
