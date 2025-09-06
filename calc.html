@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scientific Calculator — Affaan (Neon DEG/RAD)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --text:#e7e8ee; --muted:#b7bbd0;
+  --card: rgba(255,255,255,0.05);
+  --line: rgba(255,255,255,0.12);
+  --bg1:#0b0f2a; --bg2:#2b0d3a;
+  --glow1: #ff2b45;
+  --glow2: #3aa0ff;
+}
+*{ box-sizing:border-box }
+body{
+  margin:0; min-height:100vh; color:var(--text);
+  font-family:Poppins,system-ui,Arial;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  background: radial-gradient(1200px 800px at 20% 10%, rgba(255,60,80,0.10), transparent 60%),
+              radial-gradient(1000px 700px at 80% 30%, rgba(58,160,255,0.12), transparent 60%),
+              linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+.wrap{
+  width:min(520px, 96vw);
+  background:var(--card); border:2px solid var(--line); border-radius:16px; padding:18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  backdrop-filter: blur(6px);
+}
+h1{ margin:6px 6px 12px; font-size:clamp(20px, 3.2vw, 28px); }
+p{ color:var(--muted); margin:8px 6px 16px; }
+.display{
+  width:100%; border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:12px;
+  background: rgba(0,0,0,0.3); font-size:22px; text-align:right; word-wrap:break-word; min-height:58px;
+  box-shadow: inset 0 0 18px rgba(58,160,255,0.25);
+}
+.grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; margin-bottom: 12px; }
+button{
+  padding:12px 10px; border-radius:12px; border:1px solid var(--line); background:rgba(0,0,0,0.25);
+  color:var(--text); font-weight:600; cursor:pointer;
+  box-shadow: 0 0 10px var(--glow1), 0 0 14px var(--glow2);
+  transition: transform .12s ease, box-shadow .2s ease;
+}
+button:hover{ transform: translateY(-2px); }
+.wide{ grid-column: span 2; }
+.equals{ grid-column: span 2; }
+
+#modeToggle{
+  display:flex; justify-content:flex-end; gap:6px; margin-bottom:10px;
+}
+#modeToggle button{
+  padding:6px 10px; font-size:14px; border-radius:12px;
+  border:1px solid var(--line);
+  background: rgba(0,0,0,0.25);
+  box-shadow: 0 0 8px var(--glow1), 0 0 12px var(--glow2);
+}
+#modeToggle button.active{
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 0 12px var(--glow1), 0 0 18px var(--glow2);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Scientific Calculator</h1>
+  <p>Neon-styled calculator with Degree/Radian toggle.</p>
+  <div id="display" class="display"></div>
+  <div id="modeToggle">
+    <button data-mode="deg" class="active">DEG</button>
+    <button data-mode="rad">RAD</button>
+  </div>
+  <div class="grid" id="keys"></div>
+</div>
+
+<script>
+const display = document.getElementById('display');
+const keys = document.getElementById('keys');
+let angleMode = 'deg'; // default
+
+// Toggle buttons
+const toggleBtns = document.querySelectorAll('#modeToggle button');
+toggleBtns.forEach(btn => {
+  btn.addEventListener('click', ()=>{
+    angleMode = btn.dataset.mode;
+    toggleBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+const buttons = [
+  '7','8','9','(',')',
+  '4','5','6','^','√',
+  '1','2','3','×','÷',
+  '0','.','+','-','=',
+  'sin','cos','tan','log','ln',
+  'π','e','x²','1/x','%',
+  'C','DEL','ANS','EXP','±'
+];
+
+let memoryAns = 0;
+
+function btn(label){
+  const b = document.createElement('button');
+  b.textContent = label;
+  if (label==='=' || label==='C' || label==='DEL') b.classList.add('wide');
+  if (label==='=') b.classList.add('equals');
+  b.addEventListener('click', ()=>press(label));
+  return b;
+}
+buttons.forEach(l => keys.appendChild(btn(l)));
+
+function insert(text){ display.textContent += text; }
+
+function press(key){
+  if (key === 'C'){ display.textContent=''; return; }
+  if (key === 'DEL'){ display.textContent = display.textContent.slice(0,-1); return; }
+  if (key === 'ANS'){ insert(memoryAns.toString()); return; }
+  if (key === 'π'){ insert('π'); return; }
+  if (key === 'e'){ insert('e'); return; }
+  if (key === 'x²'){ insert('^2'); return; }
+  if (key === '1/x'){ insert('^-1'); return; }
+  if (key === 'EXP'){ insert('e^'); return; }
+  if (key === '±'){ toggleSign(); return; }
+  if (['sin','cos','tan','log','ln','√'].includes(key)){ insert(key + '('); return; }
+  if (key === '×'){ insert('*'); return; }
+  if (key === '÷'){ insert('/'); return; }
+  if (key === '='){ evaluate(); return; }
+  insert(key);
+}
+
+function toggleSign(){
+  const s = display.textContent;
+  const m = s.match(/(-?\d*\.?\d+)(?!.*\d)/);
+  if (!m) { insert('-'); return; }
+  const start = m.index; const end = start + m[0].length;
+  const before = s.slice(0,start);
+  const num = m[0];
+  const after = s.slice(end);
+  const toggled = num.startsWith('-') ? num.slice(1) : '-' + num;
+  display.textContent = before + toggled + after;
+}
+
+function toJS(expr){
+  const degFactor = (angleMode==='deg') ? '(Math.PI/180)*' : '';
+  return expr
+    .replace(/π/g, 'Math.PI')
+    .replace(/e(?=[^a-zA-Z0-9_])/g, 'Math.E')
+    .replace(/√\(/g, 'Math.sqrt(')
+    .replace(/sin\(/g, `Math.sin(${degFactor}(`)
+    .replace(/cos\(/g, `Math.cos(${degFactor}(`)
+    .replace(/tan\(/g, `Math.tan(${degFactor}(`)
+    .replace(/log\(/g, 'Math.log10(')
+    .replace(/ln\(/g, 'Math.log(')
+    .replace(/\^/g, '**');
+}
+
+function safeEval(expr){
+  return Function('return (' + expr + ')')();
+}
+
+function evaluate(){
+  try{
+    const js = toJS(display.textContent);
+    const val = safeEval(js);
+    memoryAns = val;
+    display.textContent = String(val);
+  }catch(e){
+    display.textContent = 'Error';
+  }
+}
+
+document.addEventListener('keydown', (e)=>{
+  const k = e.key;
+  if ((k>='0' && k<='9') || k==='.' || k==='+' || k==='-' || k==='*' || k==='/'
+      || k==='(' || k===')' || k==='%' ){
+    insert(k);
+  } else if (k==='Backspace'){ press('DEL'); }
+  else if (k==='Enter'){ evaluate(); }
+});
+</script>
+</body>
+</html>
