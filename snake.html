@@ -25,7 +25,6 @@
   }
   .row{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; justify-content:center; }
 
-  /* Synchronized rainbow animation for canvas and panel */
   @keyframes synced-rainbow {
     0%   { box-shadow: 0 0 10px #ff2b45, 0 0 20px #3aa0ff; border-color: #ff2b45; }
     25%  { box-shadow: 0 0 10px #ffea00, 0 0 20px #ff2bff; border-color: #ffea00; }
@@ -57,6 +56,13 @@
     color:var(--text); cursor:pointer; transition: transform .2s ease, box-shadow .2s ease;
   }
   button:hover{ transform: translateY(-2px); box-shadow: 0 0 14px rgba(255,43,69,0.4), 0 0 20px rgba(58,160,255,0.25); }
+
+  /* Glow when paused or restart active */
+  #pause.paused, #restart.glow {
+    transition: box-shadow 0.1s linear, border-color 0.1s linear;
+    transform: translateY(-2px);
+    border-width: 2px;
+  }
 </style>
 </head>
 <body>
@@ -114,9 +120,8 @@ function drawGrid(){
   }
 }
 
-// Rainbow glowing snake
 function drawSnake(){
-  const colors = ['#ff2b45','#3aa0ff','#ffea00','#ff2bff','#00ff90','#ff7300','#ff3c60','#3c8fff'];
+  const colors = ['#ff2b45','#3aa0ff','#ffea00','#ff2bff','#00ff90','#ff7300','#3c60','#3c8fff'];
   for (let i=0;i<snake.length;i++){
     const s = snake[i];
     const grad = ctx.createLinearGradient(s.x*size, s.y*size, s.x*size+size, s.y*size+size);
@@ -145,11 +150,12 @@ function drawFood(){
 
 let last = 0;
 function loop(ts=0){
-  if (!running){ frame = requestAnimationFrame(loop); return; }
+  if (!running){ frame = requestAnimationFrame(loop); updateGlows(); return; }
   if (ts - last > speed){
     last = ts;
     step();
     render();
+    updateGlows();
   }
   frame = requestAnimationFrame(loop);
 }
@@ -158,14 +164,12 @@ function step(){
   dir = nextDir;
   const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
 
-  // BORDER COLLISION
   if(head.x < 0 || head.x >= cells || head.y < 0 || head.y >= cells){
     running = false;
     setTimeout(() => alert('Game Over! Score: ' + score), 50);
     return;
   }
 
-  // SELF COLLISION
   if (snake.some((s,i)=> i>0 && s.x===head.x && s.y===head.y)){
     running = false;
     setTimeout(()=>alert('Game Over! Score: ' + score), 50);
@@ -190,18 +194,41 @@ function render(){
   drawGrid(); drawFood(); drawSnake();
 }
 
+let spacePressed = false;
 document.addEventListener('keydown', (e)=>{
   const k = e.key.toLowerCase();
   if (k==='arrowup' || k==='w'){ if (dir.y!==1){ nextDir={x:0,y:-1}; } }
   if (k==='arrowdown' || k==='s'){ if (dir.y!==-1){ nextDir={x:0,y:1}; } }
   if (k==='arrowleft' || k==='a'){ if (dir.x!==1){ nextDir={x:-1,y:0}; } }
   if (k==='arrowright' || k==='d'){ if (dir.x!==-1){ nextDir={x:1,y:0}; } }
-  if (k===' '){ togglePause(); }
+  if (k===' ' && !spacePressed){ togglePause(); spacePressed=true; }
+  if(k==='enter'){ init(); }
 });
+document.addEventListener('keyup',(e)=>{ if(e.key===' '){ spacePressed=false; } });
 
 function togglePause(){
   running = !running;
-  document.getElementById('pause').textContent = running ? 'Pause' : 'Resume';
+  const pauseBtn = document.getElementById('pause');
+  pauseBtn.textContent = running ? 'Pause' : 'Resume';
+  if(!running){ pauseBtn.classList.add('paused'); document.getElementById('restart').classList.add('glow'); } 
+  else { pauseBtn.classList.remove('paused'); document.getElementById('restart').classList.remove('glow'); }
+}
+
+function updateGlows(){
+  const colors = ['#ff2b45','#3aa0ff','#ffea00','#ff2bff','#00ff90','#ff7300','#ff3c60','#3c8fff'];
+  const pauseBtn = document.getElementById('pause');
+  const restartBtn = document.getElementById('restart');
+  if(pauseBtn.classList.contains('paused')){
+    const c = colors[(Date.now()/150) % colors.length | 0];
+    pauseBtn.style.boxShadow = `0 0 20px ${c}, 0 0 30px ${c}, 0 0 40px ${c}`;
+    pauseBtn.style.borderColor = c;
+  } else { pauseBtn.style.boxShadow=''; pauseBtn.style.borderColor=''; }
+  
+  if(restartBtn.classList.contains('glow')){
+    const c = colors[(Date.now()/150 + 2) % colors.length | 0];
+    restartBtn.style.boxShadow = `0 0 20px ${c}, 0 0 30px ${c}, 0 0 40px ${c}`;
+    restartBtn.style.borderColor = c;
+  } else { restartBtn.style.boxShadow=''; restartBtn.style.borderColor=''; }
 }
 
 document.getElementById('restart').addEventListener('click', init);
