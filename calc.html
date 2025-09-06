@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scientific Calculator — Affaan (DEG/RAD, exact trig)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --text:#e7e8ee; --muted:#b7bbd0;
+    --card: rgba(255,255,255,0.05);
+    --line: rgba(255,255,255,0.12);
+    --bg1:#0b0f2a; --bg2:#2b0d3a;
+    --gold:#ffd166;
+  }
+  *{ box-sizing:border-box }
+  body{
+    margin:0; min-height:100vh; color:var(--text); font-family:Poppins,system-ui,Arial;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    background: 
+      radial-gradient(1200px 800px at 20% 10%, rgba(255,60,80,0.10), transparent 60%),
+      radial-gradient(1000px 700px at 80% 30%, rgba(58,160,255,0.12), transparent 60%),
+      linear-gradient(180deg, var(--bg1), var(--bg2));
+  }
+  .wrap{
+    width:min(520px,96vw);
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  h1{ margin:6px 6px 12px; font-size:clamp(20px,3.2vw,28px) }
+  p{ color:var(--muted); margin:8px 6px 12px; }
+  .display{
+    width:100%; border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px;
+    background: rgba(0,0,0,0.3); font-size:20px; color:var(--gold); text-align:right; min-height:56px;
+    box-shadow: inset 0 0 18px rgba(58,160,255,0.08), 0 0 14px rgba(0,0,0,0.4);
+    overflow-wrap:anywhere;
+  }
+
+  .controls{ display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-bottom:8px; }
+  .controls button{
+    padding:8px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(0,0,0,0.25);
+    color:var(--gold); cursor:pointer; box-shadow: 0 0 12px var(--gold);
+  }
+
+  .grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; }
+  button.key{
+    padding:12px 10px; border-radius:12px; border:1px solid var(--line); background:rgba(0,0,0,0.25);
+    color:var(--text); font-weight:600; cursor:pointer;
+    box-shadow: 0 0 10px var(--gold), 0 0 14px rgba(255,255,255,0.06);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  button.key:hover{ transform: translateY(-2px); box-shadow: 0 0 18px var(--gold); }
+  .wide{ grid-column: span 2; }
+  .equals{ grid-column: span 2; background: linear-gradient(90deg, rgba(255,210,102,0.06), rgba(255,210,102,0.02)); color:var(--gold); box-shadow: 0 0 14px var(--gold); }
+
+  #unitBtn{ grid-column: span 1; background: rgba(0,0,0,0.3); color:var(--gold); border:1px solid rgba(255,215,102,0.6); box-shadow: 0 0 12px rgba(255,210,102,0.85); }
+
+  .hint{ color:var(--muted); font-size:13px; margin-top:8px; text-align:center; }
+  code{ background: rgba(255,255,255,0.02); padding:2px 6px; border-radius:6px; color:var(--gold); }
+</style>
+</head>
+<body>
+<div class="wrap" role="application" aria-label="Scientific calculator">
+  <h1>Scientific Calculator</h1>
+  <p>Type trig as <code>sin(30)</code> (DEG) or <code>sin(5pi/4)</code> (RAD). Use Mode to toggle DEG/RAD. Click unit button to insert unit.</p>
+
+  <div id="display" class="display" aria-live="polite"></div>
+
+  <div class="controls">
+    <button id="modeToggle" type="button">Mode: <strong id="modeLabel">DEG</strong></button>
+    <button id="unitBtn" type="button">°</button>
+  </div>
+
+  <div class="grid" id="keys" aria-hidden="false"></div>
+  <div class="hint">Examples: <code>sin(30)</code> → <strong>1/2</strong>, <code>cos(5pi/4)</code> → <strong>-1/√2</strong></div>
+</div>
+
+<script>
+const keyList=['7','8','9','(',')','4','5','6','^','√','1','2','3','×','÷','0','.','+','-','=',
+'sin','cos','tan','log','ln','π','e','x²','1/x','%','C','DEL','ANS','EXP','±'];
+const keysContainer=document.getElementById('keys');
+function createKey(label){const b=document.createElement('button');b.type='button';b.className='key';
+b.textContent=label;if(label==='='||label==='C'||label==='DEL')b.classList.add('wide');
+if(label==='=')b.classList.add('equals');b.addEventListener('click',()=>press(label));return b;}
+keyList.forEach(l=>keysContainer.appendChild(createKey(l)));
+
+const display=document.getElementById('display');
+let memoryAns=0,mode='deg';
+const modeLabel=document.getElementById('modeLabel');
+const modeToggle=document.getElementById('modeToggle');
+const unitBtn=document.getElementById('unitBtn');
+
+modeToggle.addEventListener('click',()=>{
+  mode=(mode==='deg')?'rad':'deg';
+  modeLabel.textContent=mode.toUpperCase();
+  unitBtn.textContent=(mode==='deg')?'°':'rad';
+});
+unitBtn.addEventListener('click',()=>appendToDisplay((mode==='deg')?'°':'rad'));
+function appendToDisplay(txt){display.textContent+=txt;}
+
+const trigExact={
+  deg:{0:{sin:'0',cos:'1',tan:'0'},30:{sin:'1/2',cos:'√3/2',tan:'1/√3'},
+  45:{sin:'1/√2',cos:'1/√2',tan:'1'},60:{sin:'√3/2',cos:'1/2',tan:'√3'},90:{sin:'1',cos:'0',tan:'undefined'},
+  120:{sin:'√3/2',cos:'-1/2',tan:'-√3'},135:{sin:'1/√2',cos:'-1/√2',tan:'-1'},150:{sin:'1/2',cos:'-√3/2',tan:'-1/√3'},
+  180:{sin:'0',cos:'-1',tan:'0'},210:{sin:'-1/2',cos:'-√3/2',tan:'1/√3'},225:{sin:'-1/√2',cos:'-1/√2',tan:'1'},
+  240:{sin:'-√3/2',cos:'-1/2',tan:'√3'},270:{sin:'-1',cos:'0',tan:'undefined'},300:{sin:'-√3/2',cos:'1/2',tan:'-√3'},
+  315:{sin:'-1/√2',cos:'1/√2',tan:'-1'},330:{sin:'-1/2',cos:'√3/2',tan:'-1/√3'},360:{sin:'0',cos:'1',tan:'0'}},
+  rad:{'0':{sin:'0',cos:'1',tan:'0'},'π/6':{sin:'1/2',cos:'√3/2',tan:'1/√3'},
+  'π/4':{sin:'1/√2',cos:'1/√2',tan:'1'},'π/3':{sin:'√3/2',cos:'1/2',tan:'√3'},'π/2':{sin:'1',cos:'0',tan:'undefined'},
+  '2π/3':{sin:'√3/2',cos:'-1/2',tan:'-√3'},'3π/4':{sin:'1/√2',cos:'-1/√2',tan:'-1'},'5π/6':{sin:'1/2',cos:'-√3/2',tan:'-1/√3'},
+  'π':{sin:'0',cos:'-1',tan:'0'},'7π/6':{sin:'-1/2',cos:'-√3/2',tan:'1/√3'},'5π/4':{sin:'-1/√2',cos:'-1/√2',tan:'1'},
+  '4π/3':{sin:'-√3/2',cos:'-1/2',tan:'√3'},'3π/2':{sin:'-1',cos:'0',tan:'undefined'},'5π/3':{sin:'-√3/2',cos:'1/2',tan:'-√3'},
+  '7π/4':{sin:'-1/√2',cos:'1/√2',tan:'-1'},'11π/6':{sin:'-1/2',cos:'√3/2',tan:'-1/√3'},'2π':{sin:'0',cos:'1',tan:'0'}}
+};
+
+// Converts deg or rad input to exact fraction string if standard angle
+function tryExactTrig(expr){
+  expr=expr.trim();
+  const m=expr.match(/^(sin|cos|tan)\((.+)\)$/i);
+  if(!m)return null;
+  let fn=m[1].toLowerCase(),arg=m[2];
+  let u=mode;
+  if(/°/.test(arg)) u='deg';
+  else if(/π|pi/i.test(arg)||/\brad\b/.test(arg)) u='rad';
+  if(u==='deg'){arg=arg.replace(/°/g,'');arg=Number(arg);arg=Math.round(arg*1e10)/1e10;
+    if(trigExact.deg.hasOwnProperty(arg)) return trigExact.deg[arg][fn];}
+  else{
+    arg=canonicalizeRad(arg);
+    if(arg&&trigExact.rad.hasOwnProperty(arg)) return trigExact.rad[arg][fn];
+  }
+  return null;
+}
+
+// Canonicalize rad input like "5pi/4" → "5π/4"
+function canonicalizeRad(s){
+  s=s.replace(/pi/gi,'π').replace(/\s+/g,'').replace(/\*/g,'');
+  return s;
+}
+
+function toJS(expr){
+  expr=expr.replace(/([0-9]+(?:\.[0-9]+)?)\s*°/g,'($1*Math.PI/180)');
+  expr=expr.replace(/π/g,'Math.PI').replace(/\^/g,'**');
+  expr=expr.replace(/√\(/g,'Math.sqrt(');
+  expr=expr.replace(/log\(/g,'Math.log10(');
+  expr=expr.replace(/ln\(/g,'Math.log(');
+  expr=expr.replace(/(sin|cos|tan)\(([^)]+)\)/g,(m,fn,arg)=>{
+    return `Math.${fn}(${arg}${mode==='deg'?'*Math.PI/180':''})`;
+  });
+  return expr;
+}
+
+function formatNumber(n){return !isFinite(n)?String(n):parseFloat(Number(n).toPrecision(12)).toString();}
+
+function evaluate(){
+  const txt=display.textContent.trim();
+  if(!txt)return;
+  try{
+    const exact=tryExactTrig(txt);
+    if(exact){ display.textContent=exact; return; }
+    const js=toJS(txt);
+    const val=Function('return ('+js+')')();
+    display.textContent=formatNumber(val);
+    memoryAns=val;
+  }catch(e){display.textContent='Error';}
+}
+
+function press(key){
+  if(key==='C'){ display.textContent=''; return; }
+  if(key==='DEL'){ display.textContent=display.textContent.slice(0,-1); return; }
+  if(key==='ANS'){ display.textContent+=String(memoryAns); return; }
+  if(key==='π'){ display.textContent+='π'; return; }
+  if(key==='e'){ display.textContent+='e'; return; }
+  if(key==='x²'){ display.textContent+='^2'; return; }
+  if(key==='1/x'){ display.textContent+='^-1'; return; }
+  if(key==='EXP'){ display.textContent+='e^'; return; }
+  if(key==='±'){ toggleSign(); return; }
+  if(['sin','cos','tan','log','ln','√'].includes(key)){
+    display.textContent += (key==='√')?'√(' : key+'('; return;
+  }
+  if(key==='×'){ display.textContent+='*'; return; }
+  if(key==='÷'){ display.textContent+='/'; return; }
+  if(key==='='){ evaluate(); return; }
+  display.textContent+=key;
+}
+
+function toggleSign(){
+  const s=display.textContent;
+  const m=s.match(/(-?\d*\.?\d+)(?!.*\d)/);
+  if(!m){ display.textContent+='-'; return; }
+  const start=m.index,end=start+m[0].length;
+  const before=s.slice(0,start),num=m[0],after=s.slice(end);
+  display.textContent=before+(num.startsWith('-')?num.slice(1):'-'+num)+after;
+}
+
+document.addEventListener('keydown',(e)=>{
+  const k=e.key;
+  if((k>='0'&&k<='9')||k==='.'||k==='+'||k==='-'||k==='*'||k==='/'||k==='('||k===')'||k==='%'){
+    display.textContent+=k; e.preventDefault();
+  }else if(k==='Enter'){ evaluate(); e.preventDefault(); }
+  else if(k==='Backspace'){ display.textContent=display.textContent.slice(0,-1); e.preventDefault(); }
+});
+</script>
+</body>
+</html>
