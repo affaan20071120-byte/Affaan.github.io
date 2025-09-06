@@ -1,0 +1,230 @@
+/* ---------------------------
+   Keyboard / button layout
+   --------------------------- */
+const keyList = [
+  '7','8','9','(',')',
+  '4','5','6','^','√',
+  '1','2','3','×','÷',
+  '0','.','+','-','=',
+  'sin','cos','tan','log','ln',
+  'π','e','x²','1/x','%',
+  'C','DEL','ANS','EXP','±'
+];
+
+const keysContainer = document.getElementById('keys');
+function createKey(label){
+  const b = document.createElement('button');
+  b.type='button';
+  b.className='key';
+  b.textContent=label;
+  if(label==='='||label==='C'||label==='DEL') b.classList.add('wide');
+  if(label==='=') b.classList.add('equals');
+  b.addEventListener('click', ()=>press(label));
+  return b;
+}
+keyList.forEach(l => keysContainer.appendChild(createKey(l)));
+
+const display = document.getElementById('display');
+let memoryAns = 0;
+
+/* ---------------------------
+   Mode + Unit button logic
+   --------------------------- */
+let mode = 'deg'; // 'deg' or 'rad'
+const modeLabel = document.getElementById('modeLabel');
+const modeToggle = document.getElementById('modeToggle');
+const unitBtn = document.getElementById('unitBtn');
+
+modeToggle.addEventListener('click', ()=>{
+  mode = (mode === 'deg') ? 'rad' : 'deg';
+  modeLabel.textContent = mode.toUpperCase();
+  unitBtn.textContent = (mode==='deg') ? '°' : 'rad';
+});
+
+unitBtn.addEventListener('click', ()=>{
+  appendToDisplay((mode==='deg') ? '°' : 'rad');
+});
+
+/* append helper */
+function appendToDisplay(txt){ display.textContent += txt; }
+
+/* ---------------------------
+   Trig exact lookup tables
+   --------------------------- */
+const trigExact = {
+  deg: { /* ... keep your original deg table ... */ },
+  rad: { /* ... keep your original rad table ... */ }
+};
+
+/* Utility: nearly equal */
+function nearlyEqual(a,b,eps=1e-12){ return Math.abs(a-b) <= eps; }
+
+/* Rational approx for fraction of pi */
+function rationalApprox(x, maxDen=48, tol=1e-10){
+  for(let d=1; d<=maxDen; d++){
+    const n = Math.round(x * d);
+    if(nearlyEqual(x, n/d, tol)) return {n, d};
+  }
+  return null;
+}
+
+/* Canonicalize rad expression like pi/7, 3*pi/2, 5pi/4, etc. */
+function canonicalizeRadicalPi(expr){
+  if(typeof expr !== 'string') expr = String(expr);
+  let s = expr.replace(/\s+/g,'').replace(/PI/ig,'π').replace(/\*/g,'');
+  if(/π/.test(s)){
+    try{
+      let sign = 1;
+      if(s[0]==='-'){ sign=-1; s=s.slice(1); }
+      s = s.replace(/^π/, '1π').replace(/([^\d])π/, '$11π');
+      const m = s.match(/^(-?\d+)?π(?:\/(-?\d+))?$/i);
+      if(m){
+        let n = (m[1]===undefined||m[1]==='')?1:Number(m[1]);
+        let d = (m[2]===undefined)?1:Number(m[2]);
+        n*=sign;
+        const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+        const g=gcd(n,d)||1; n/=g; d/=g;
+        let frac = n/d;
+        frac = ((frac % 2) + 2) % 2;
+        const approx = rationalApprox(frac,48,1e-10);
+        if(!approx) return null;
+        let {n:N, d:D}=approx;
+        if(N===0) return '0';
+        if(N===D) return 'π';
+        return (N===1?'π':N+'π')+(D===1?'':'/'+D);
+      }
+    }catch(e){ return null; }
+  } else {
+    try{
+      const js = expr.replace(/\^/g,'**').replace(/√\(/g,'Math.sqrt(').replace(/π/g,'Math.PI').replace(/pi/ig,'Math.PI');
+      const val = Function('return ('+js+')')();
+      if(!isFinite(val)) return null;
+      const frac = val/Math.PI;
+      const approx = rationalApprox(frac,48,1e-10);
+      if(!approx) return null;
+      let {n,d}=approx;
+      n = ((n % (2*d)) + 2*d) % (2*d);
+      if(n===0) return '0';
+      if(n===d) return 'π';
+      const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+      const g=gcd(n,d)||1; n/=g; d/=g;
+      return (n===1?'π':n+'π')+(d===1?'':'/'+d);
+    }catch(e){ return null; }
+  }
+  return null;
+}
+
+/* Try exact symbolic trig if input is a single trig call */
+function tryExactTrigSingle(text){
+  text = text.trim();
+  const m = text.match(/^\s*(sin|cos|tan)\((.+)\)\s*$/i);
+  if(!m) return {found:false};
+  const fn = m[1].toLowerCase();
+  let argRaw = m[2].trim();
+  let unit = mode;
+  if(/°/.test(argRaw)) unit='deg';
+  else if(/\brad\b/.test(argRaw)||/π|pi/i.test(argRaw)) unit='rad';
+
+  if(unit==='deg'){
+    argRaw = argRaw.replace(/°/g,'');
+    let degVal;
+    try{ degVal = Function('return ('+argRaw+')')(); }catch(e){ return {found:false}; }
+    if(!isFinite(degVal)) return {found:false};
+    let degNorm = ((degVal%360)+360)%360;
+    const rounded=Math.round(degNorm);
+    if(nearlyEqual(degNorm,rounded,1e-10)) degNorm=rounded;
+    if(trigExact.deg.hasOwnProperty(degNorm)) return {found:true,value:trigExact.deg[degNorm][fn]};
+    return {found:false};
+  } else {
+    const key = canonicalizeRadicalPi(argRaw);
+    if(key && trigExact.rad.hasOwnProperty(key)) return {found:true,value:trigExact.rad[key][fn]};
+    return {found:false};
+  }
+}
+
+/* Convert expression to JS for numeric eval */
+function toJS(expr){
+  if(typeof expr!=='string') expr=String(expr);
+  expr = expr.replace(/([0-9]+(?:\.[0-9]+)?)\s*°/g,'($1*Math.PI/180)');
+  expr = expr.replace(/\bdeg\b/g,'*Math.PI/180');
+  expr = expr.replace(/π/g,'Math.PI').replace(/\bpi\b/ig,'Math.PI');
+  expr = expr.replace(/√\(/g,'Math.sqrt(');
+  expr = expr.replace(/\^/g,'**');
+  expr = expr.replace(/\brad\b/g,'');
+
+  // universal trig conversion handling DEG and RAD modes
+  expr = expr.replace(/(sin|cos|tan)\(\s*([^\)]+?)\s*\)/g,(m,fn,arg)=>{
+      arg = arg.replace(/°/g,'');
+      if(mode==='deg') return `Math.${fn}(${arg}*Math.PI/180)`;
+      return `Math.${fn}(${arg})`;
+  });
+
+  expr = expr.replace(/log\(/g,'Math.log10(');
+  expr = expr.replace(/ln\(/g,'Math.log(');
+  return expr;
+}
+
+/* Format numeric results */
+function formatNumber(n){
+  if(!isFinite(n)) return String(n);
+  const s=Number(n).toPrecision(12);
+  if(/[eE]/.test(s)) return s;
+  return parseFloat(s).toString();
+}
+
+/* Evaluate and display */
+function evaluate(){
+  const txt=display.textContent.trim();
+  if(!txt) return;
+  const exact=tryExactTrigSingle(txt);
+  if(exact.found){ display.textContent=exact.value; memoryAns=exact.value; return; }
+  try{
+    const js=toJS(txt);
+    const val=Function('return ('+js+')')();
+    display.textContent=formatNumber(val);
+    memoryAns=val;
+  }catch(e){ display.textContent='Error'; }
+}
+
+/* Button behaviors */
+function press(key){
+  if(key==='C'){ display.textContent=''; return; }
+  if(key==='DEL'){ display.textContent=display.textContent.slice(0,-1); return; }
+  if(key==='ANS'){ display.textContent+=String(memoryAns); return; }
+  if(key==='π'){ display.textContent+='π'; return; }
+  if(key==='e'){ display.textContent+='e'; return; }
+  if(key==='x²'){ display.textContent+='^2'; return; }
+  if(key==='1/x'){ display.textContent+='^-1'; return; }
+  if(key==='EXP'){ display.textContent+='e^'; return; }
+  if(key==='±'){ toggleSign(); return; }
+  if(['sin','cos','tan','log','ln','√'].includes(key)){
+    if(key==='√') display.textContent+='√(';
+    else display.textContent+=key+'(';
+    return;
+  }
+  if(key==='×'){ display.textContent+='*'; return; }
+  if(key==='÷'){ display.textContent+='/'; return; }
+  if(key==='='){ evaluate(); return; }
+  display.textContent+=key;
+}
+
+function toggleSign(){
+  const s=display.textContent;
+  const m=s.match(/(-?\d*\.?\d+)(?!.*\d)/);
+  if(!m){ display.textContent+='-'; return; }
+  const start=m.index; const end=start+m[0].length;
+  const before=s.slice(0,start);
+  const num=m[0];
+  const after=s.slice(end);
+  const toggled=num.startsWith('-')?num.slice(1):'-'+num;
+  display.textContent=before+toggled+after;
+}
+
+/* Keyboard support */
+document.addEventListener('keydown',(e)=>{
+  const k=e.key;
+  if((k>='0'&&k<='9')||k==='.'||k==='+'||k==='-'||k==='*'||k==='/'||k==='('||k===')'||k==='%'){
+    display.textContent+=k; e.preventDefault();
+  } else if(k==='Enter'){ evaluate(); e.preventDefault(); }
+  else if(k==='Backspace'){ display.textContent=display.textContent.slice(0,-1); e.preventDefault(); }
+});
