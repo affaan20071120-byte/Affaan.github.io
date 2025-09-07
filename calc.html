@@ -142,16 +142,29 @@
     }
 
     function evaluate(){
-      try{
-        const js = toJS(display.textContent);
-        const val = safeEval(js);
-        memoryAns = val;
-        display.textContent = String(val);
-      }catch(e){
-        display.textContent = 'Error';
+     try{
+    const js = toJS(display.textContent);
+    const val = safeEval(js);
+
+    // Special case: tan(90° + 180k) should be undefined
+    if (/tan\(/.test(display.textContent)) {
+      const inputMatch = display.textContent.match(/tan\(([-]?\d+)\)/);
+      if (inputMatch) {
+        const angle = parseFloat(inputMatch[1]);
+        if ((angle - 90) % 180 === 0) {
+          display.textContent = "undefined";
+          return;
+        }
       }
     }
 
+    memoryAns = val;
+    display.textContent = String(val);
+  }catch(e){
+    display.textContent = 'Error';
+  }
+}
+    
     document.addEventListener('keydown', (e)=>{
       const k = e.key;
       if ((k>='0' && k<='9') || k==='.' || k==='+' || k==='-' || k==='*' || k==='/'
