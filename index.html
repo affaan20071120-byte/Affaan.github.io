@@ -225,12 +225,10 @@ nav{ position:sticky; top:8px; display:flex; justify-content:center }
 <!-- Contact -->
 <section id="contact">
   <div class="box">
-    <h2>Contact</h2>
+    <h2>Contacts</h2>
     <p class="muted">
       <strong>
-        <span style="color:#3aa0ff; text-decoration:underline;">affaan20071120@gmail.com</span><br>
-        <span style="color:#3aa0ff; text-decoration:underline;">Dragongaming11</span><br>
-        <span style="color:#7c3aed; text-decoration:underline;">Affaan.github.io</span>
+        
       </strong>
     </p>
   </div>
@@ -273,6 +271,12 @@ function draw(){
   requestAnimationFrame(draw);
 }
 draw();
+// <<< NEW SNIPPET TO MAKE MENU LINKS WORK >>>
+document.querySelectorAll('#menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('menu').style.display = 'none';
+  });
+});
 </script>
 </body>
 </html>
