@@ -271,10 +271,16 @@ function draw(){
   requestAnimationFrame(draw);
 }
 draw();
-// <<< NEW SNIPPET TO MAKE MENU LINKS WORK >>>
+  // Make Contact (and all menu links) scroll smoothly and close menu
 document.querySelectorAll('#menu a').forEach(link => {
-  link.addEventListener('click', () => {
-    document.getElementById('menu').style.display = 'none';
+  link.addEventListener('click', e => {
+    e.preventDefault(); // prevent default jump
+    const targetId = link.getAttribute('href').substring(1);
+    const target = document.getElementById(targetId);
+    if(target){
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+    document.getElementById('menu').style.display = 'none'; // close menu
   });
 });
 </script>
