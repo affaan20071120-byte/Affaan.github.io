@@ -271,6 +271,18 @@ function draw(){
   requestAnimationFrame(draw);
 }
 draw();
+const contactBtn = document.getElementById('contactBtn'); // your Contacts button in hamburger
+if(contactBtn){
+  contactBtn.addEventListener('click', () => {
+    const target = document.getElementById('contacts'); // your Contact section ID
+    if(target){
+      const navHeight = document.querySelector('nav').offsetHeight;
+      const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+      window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+    menu.style.display = 'none'; // close hamburger after click
+  });
+}
 </script>
 </body>
 </html>
