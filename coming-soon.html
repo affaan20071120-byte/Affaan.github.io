@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coming Soon — Affaan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --text:#e7e8ee; --muted:#b7bbd0;
+      --card: rgba(255,255,255,0.05);
+      --line: rgba(255,255,255,0.12);
+      --bg1:#0b0f2a; --bg2:#2b0d3a;
+    }
+    *{ box-sizing:border-box }
+    body{ margin:0; min-height:100vh; color:var(--text); font-family:Poppins,system-ui,Arial; display:flex; align-items:center; justify-content:center; padding:20px;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(255,60,80,0.10), transparent 60%),
+                  radial-gradient(1000px 700px at 80% 30%, rgba(58,160,255,0.12), transparent 60%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2)); }
+    .wrap{
+      width:min(580px, 96vw);
+      background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px;
+      text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); backdrop-filter: blur(6px);
+    }
+    h1{ margin:0 0 8px; text-shadow: 0 0 10px rgba(255,43,69,0.5) }
+    p{ color:var(--muted) }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>More Projects Coming Soon…</h1>
+    <p>Stay tuned! New projects are in progress and will appear here shortly.</p>
+  </div>
+</body>
+</html>
