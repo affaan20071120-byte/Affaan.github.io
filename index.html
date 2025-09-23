@@ -206,6 +206,19 @@ nav{ position:sticky; top:8px; display:flex; justify-content:center }
   <path fill="#60a5fa" d="M44 6c6 6 10 14 10 22s-4 16-10 22l-8-8 8-8c2-4 2-8 0-12l-8-8 8-8z"/>
   <path fill="#93c5fd" d="M36 50l-8-8-10 2-2 10 10-2 2-10 8 8z"/>
   <circle cx="44" cy="20" r="6" fill="#1f2937"/>
+
+     <!-- Payroll Management System (Password Protected) -->
+      <a class="card" href="#" onclick="openPayroll(event)">
+        <h3 class="titleFlex">
+          <svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="8" y="10" width="48" height="44" rx="6" ry="6" fill="#1f2937" stroke="#3aa0ff" stroke-width="2"/>
+            <path d="M20 20h24M20 28h24M20 36h14M20 44h10" stroke="#3aa0ff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span>Payroll Management System</span>
+        </h3>
+        <p class="muted"><strong>A complete payroll management system with employee database, salary calculations, and PDF export features. Built using Python, MySQL, and modern UI design.</strong></p>
+        <span class="btn">Password Required</span>
+      </a>
 </svg>
 <span>Upcoming Projects</span></h3>
           <p class="muted"><strong>More exciting projects are coming soon…</strong></p>
@@ -289,6 +302,17 @@ function draw(){
   requestAnimationFrame(draw);
 }
 draw();
+
+// Password protect payroll project
+function openPayroll(e) {
+  e.preventDefault();
+  const pwd = prompt("🔒 Enter password to access Payroll Management System:");
+  if (pwd === "Affaan2007") { // change this password
+    window.open("payroll.html", "_blank");
+  } else if (pwd !== null) {
+    alert("❌ Incorrect password. Access denied!");
+  }
+}
 </script>
 </body>
 </html>
