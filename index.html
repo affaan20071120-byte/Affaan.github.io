@@ -206,40 +206,36 @@ nav{ position:sticky; top:8px; display:flex; justify-content:center }
   <path fill="#60a5fa" d="M44 6c6 6 10 14 10 22s-4 16-10 22l-8-8 8-8c2-4 2-8 0-12l-8-8 8-8z"/>
   <path fill="#93c5fd" d="M36 50l-8-8-10 2-2 10 10-2 2-10 8 8z"/>
   <circle cx="44" cy="20" r="6" fill="#1f2937"/>
-  <!-- Payroll Management System (Password Protected) -->
-<a class="card" href="#" onclick="openPayroll(event)">
-  <h3>
-    <svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
-      <rect x="8" y="10" width="48" height="44" rx="6" ry="6" fill="#1f2937" stroke="#3aa0ff" stroke-width="2"/>
-      <path d="M20 20h24M20 28h24M20 36h14M20 44h10" stroke="#3aa0ff" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    Payroll Management System
-  </h3>
   
-  <!-- Lock on its own line -->
-  <div style="margin: 6px 0; font-size: 18px; color: #ffcc00;">
-    🔒 Password Protected
-  </div>
+   <!-- ========== NEW PAYROLL CARD - ADD THIS HERE ========== -->
+        <div class="card" onclick="openPayrollSystem()" style="cursor:pointer;">
+          <h3 class="titleFlex">
+<svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+  <rect x="8" y="12" width="48" height="40" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="12" y="16" width="40" height="6" rx="2" fill="#3b82f6"/>
+  <g fill="#e2e8f0">
+    <rect x="12" y="26" width="16" height="3" rx="1"/>
+    <rect x="12" y="32" width="20" height="3" rx="1"/>
+    <rect x="12" y="38" width="12" height="3" rx="1"/>
+    <rect x="36" y="26" width="16" height="3" rx="1"/>
+    <rect x="36" y="32" width="14" height="3" rx="1"/>
+    <rect x="36" y="38" width="18" height="3" rx="1"/>
+  </g>
+  <circle cx="20" cy="8" r="6" fill="#10b981" stroke="#059669" stroke-width="2"/>
+  <path d="M17 8l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/>
+</svg>
+<span>Payroll Management System</span></h3>
+          <p class="muted"><strong>Advanced employee payroll Management system with database integration and secure authentication.</strong></p>
+          <span class="btn">Protected Access</span>
+        </div>
+        <!-- ========== END OF NEW PAYROLL CARD ========== -->
 
-  <p class="muted">
-    <strong>A complete payroll management system with employee database, salary calculations, and PDF export features. Built using Python, MySQL, and modern UI design.</strong>
-  </p>
-  
-  <span class="btn">Enter Password</span>
-</a>
-
-<script>
-function openPayroll(event) {
-  event.preventDefault();
-  const password = prompt("Enter password to access Payroll Management System:");
-  if (password === "1234") { // <-- set your password here
-    window.location.href = "payroll.html"; // <-- change this to your payroll project link
-  } else {
-    alert("❌ Incorrect password! Access denied.");
-  }
-}
-</script>
-
+        <a class="card" href="coming-soon.html" target="_blank" rel="noopener">
+          <h3 class="titleFlex">
+<svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+  <path fill="#60a5fa" d="M44 6c6 6 10 14 10 22s-4 16-10 22l-8-8 8-8c2-4 2-8 0-12l-8-8 8-8z"/>
+  <path fill="#93c5fd" d="M36 50l-8-8-10 2-2 10 10-2 2-10 8 8z"/>
+  <circle cx="44" cy="20" r="6" fill="#1f2937"/>
   
 </svg>
 <span>Upcoming Projects</span></h3>
@@ -298,6 +294,131 @@ contactBtn.addEventListener('click', e => {
   menu.style.display = 'none'; // close hamburger
 });
 
+  // ========== ADD NEW PAYROLL FUNCTION HERE ========== 
+function openPayrollSystem() {
+  const password = prompt("🔐 Enter Access Code for Payroll System:\n\n[Hint: AI + Tech + Future]");
+  
+  if (password === null) {
+    return; // User cancelled
+  }
+  
+  // AI tech background level passwords
+  const validPasswords = [
+    "neural2024",
+    "quantum_ai",
+    "deeplearn",
+    "ai_future",
+    "technode",
+    "codestream"
+  ];
+  
+  if (validPasswords.includes(password.toLowerCase())) {
+    // Create a simple payroll demo page in new tab
+    const payrollWindow = window.open('', '_blank');
+    payrollWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Payroll Management System - Demo</title>
+        <style>
+          body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; 
+            padding: 20px; 
+            margin: 0;
+          }
+          .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: rgba(255,255,255,0.1); 
+            padding: 30px; 
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+          }
+          h1 { 
+            text-align: center; 
+            color: #ffeb3b; 
+            text-shadow: 0 0 10px rgba(255,235,59,0.5);
+          }
+          .demo-notice {
+            background: rgba(255,193,7,0.2);
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+          }
+          .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+          }
+          .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+          }
+          .tech-stack {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>🔐 Payroll Management System</h1>
+          <div class="demo-notice">
+            <h3>🚀 Advanced Enterprise Solution</h3>
+            <p>This is a demonstration of the Payroll Management System developed with modern technologies.</p>
+          </div>
+          
+          <div class="feature-list">
+            <div class="feature">
+              <h4>👥 Employee Management</h4>
+              <p>Complete employee database with personal details, department allocation, and role management.</p>
+            </div>
+            <div class="feature">
+              <h4>💰 Salary Calculation</h4>
+              <p>Automated salary computation with tax deductions, bonuses, and overtime calculations.</p>
+            </div>
+            <div class="feature">
+              <h4>📊 Reports & Analytics</h4>
+              <p>Comprehensive reporting system with payroll summaries and expense analytics.</p>
+            </div>
+            <div class="feature">
+              <h4>🔒 Secure Database</h4>
+              <p>MySQL integration with encrypted data storage and secure authentication.</p>
+            </div>
+          </div>
+          
+          <div class="tech-stack">
+            <h3>⚡ Technology Stack</h3>
+            <p><strong>Backend:</strong> Python with advanced OOP concepts</p>
+            <p><strong>Database:</strong> MySQL with normalized schema design</p>
+            <p><strong>Security:</strong> Encrypted password authentication</p>
+            <p><strong>Interface:</strong> Modern GUI with Tkinter</p>
+            <p><strong>Features:</strong> CRUD operations, Data validation, Error handling</p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <p style="color: #ffeb3b;">🎯 Developed by Mohammed Affaan Delvi</p>
+            <p style="font-size: 12px; opacity: 0.8;">This system demonstrates advanced programming concepts and real-world application development.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
+  } else {
+    alert("❌ Access Denied!\n\nIncorrect password. Contact administrator for access credentials.");
+  }
+}
+// ========== END OF NEW PAYROLL FUNCTION ==========
+  
 const c = document.getElementById('stars');
 const ctx = c.getContext('2d');
 let stars = [];
