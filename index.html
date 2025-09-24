@@ -290,18 +290,14 @@ contactBtn.addEventListener('click', e => {
 
 // ========== ADD NEW PAYROLL FUNCTION HERE ========== 
 function openPayrollSystem() {
-  const password = prompt("🔐 Enter Access Code for Payroll System:\n\n[Hint: AI + Tech + Future]");
+  const password = prompt("🔐 Enter Access Code for Payroll System:\n\n[Hint: Personal Code]");
   
   if (password === null) {
     return; // User cancelled
   }
   
   // Single password access
-  const validPasswords = [
-    "Mohammed20071120"
-  ];
-  
-  if (validPasswords.includes(password)) {
+  if (password === "Mohammed20071120") {
     // Create under construction page in new tab
     const payrollWindow = window.open('', '_blank');
     payrollWindow.document.write(`
