@@ -161,15 +161,6 @@ nav{ position:sticky; top:8px; display:flex; justify-content:center }
 <p class="muted"><strong>I have started learning HTML since Grade 8 and building structured web pages. I have a strong foundation in HTML.</strong></p>
 </a>
 
-<!-- SQL -->
-<a class="card" href="https://en.wikipedia.org/wiki/SQL" target="_blank" rel="noopener">
-<h3 class="titleFlex">
-<img class="logoSVG" src="https://cdn.worldvectorlogo.com/logos/postgresql.svg" alt="SQL Logo">
-<span>SQL</span>
-</h3>
-<p class="muted"><strong>Proficient in SQL database queries, joins, and database design. Experience with complex data manipulation and optimization techniques.</strong></p>
-</a>
-
 </div>
 </div>
 </section>
@@ -310,7 +301,7 @@ function openPayrollSystem() {
     "Mohammed20071120"
   ];
   
-  if (validPasswords.includes(password.toLowerCase())) {
+  if (validPasswords.includes(password)) {
     // Create under construction page in new tab
     const payrollWindow = window.open('', '_blank');
     payrollWindow.document.write(`
