@@ -141,25 +141,75 @@
       return Function('return (' + expr + ')')();
     }
 
-    function evaluate(){
-     try{
-    const js = toJS(display.textContent);
-    const val = safeEval(js);
+   function evaluate(){
+  try{
+    const input = display.textContent;
+    const js = toJS(input);
+    let val = safeEval(js);
 
-    // Special case: tan(90° + 180k) should be undefined
-    if (/tan\(/.test(display.textContent)) {
-      const inputMatch = display.textContent.match(/tan\(([-]?\d+)\)/);
-      if (inputMatch) {
-        const angle = parseFloat(inputMatch[1]);
-        if ((angle - 90) % 180 === 0) {
-          display.textContent = "undefined";
-          return;
+    const match = input.match(/(sin|cos|tan)\(([-]?\d+)\)/);
+    if (match) {
+      const fn = match[1];
+      let angle = parseInt(match[2]);
+
+      angle = ((angle % 360) + 360) % 360;
+
+      const exact = {
+        sin: {
+          0:"0", 30:"1/2", 45:"√2/2", 60:"√3/2", 90:"1",
+          120:"√3/2", 135:"√2/2", 150:"1/2", 180:"0",
+          210:"-1/2", 225:"-√2/2", 240:"-√3/2", 270:"-1",
+          300:"-√3/2", 315:"-√2/2", 330:"-1/2", 360:"0"
+        },
+        cos: {
+          0:"1", 30:"√3/2", 45:"√2/2", 60:"1/2", 90:"0",
+          120:"-1/2", 135:"-√2/2", 150:"-√3/2", 180:"-1",
+          210:"-√3/2", 225:"-√2/2", 240:"-1/2", 270:"0",
+          300:"1/2", 315:"√2/2", 330:"√3/2", 360:"1"
+        },
+        tan: {
+          0:"0", 30:"1/√3", 45:"1", 60:"√3",
+          120:"-√3", 135:"-1", 150:"-1/√3",
+          180:"0", 210:"1/√3", 225:"1", 240:"√3",
+          300:"-√3", 315:"-1", 330:"-1/√3", 360:"0"
         }
+      };
+
+      if (fn === "tan" && (angle === 90 || angle === 270)) {
+        display.textContent = "undefined";
+        return;
+      }
+
+      if (exact[fn][angle] !== undefined) {
+        display.textContent = exact[fn][angle];
+        memoryAns = val;
+        return;
       }
     }
 
     memoryAns = val;
-    display.textContent = String(val);
+
+    // 🔹 Fraction converter (for ALL other values)
+    function toFraction(x) {
+      const tolerance = 1.0E-6;
+      let h1 = 1, h2 = 0, k1 = 0, k2 = 1;
+      let b = x;
+      do {
+        let a = Math.floor(b);
+        let aux = h1; h1 = a * h1 + h2; h2 = aux;
+        aux = k1; k1 = a * k1 + k2; k2 = aux;
+        b = 1 / (b - a);
+      } while (Math.abs(x - h1 / k1) > x * tolerance);
+
+      return k1 === 1 ? h1.toString() : h1 + "/" + k1;
+    }
+
+    if (Number.isFinite(val)) {
+      display.textContent = toFraction(val);
+    } else {
+      display.textContent = String(val);
+    }
+
   }catch(e){
     display.textContent = 'Error';
   }
