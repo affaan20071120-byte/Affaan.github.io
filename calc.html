@@ -139,56 +139,59 @@
     function safeEval(expr){
       return Function('return (' + expr + ')')();
     }
-const input = display.textContent;
-    
-if (/(\d|\))\s+(sin|cos|tan|log|ln|√)/.test(input)) {
-  display.textContent = "Error";
-  return;
-}
+
     function evaluate(){
-      try{
-        const input = display.textContent;
-        const js = toJS(input);
-        let val = safeEval(js);
+     try{
+    const input = display.textContent;
 
-        const trimmed = input.replace(/\s+/g, '');
-        const match = trimmed.match(/^(sin|cos|tan)\(([-]?\d+)\)$/);
-        if (match) {
-          const fn = match[1];
-          let angle = parseInt(match[2]);
-          angle = ((angle % 360) + 360) % 360;
+    // ✅ FIX 1: block invalid "1/2 sin(30)"
+    if (/(\d|\))\s+(sin|cos|tan|log|ln|√)/.test(input)) {
+      display.textContent = "Error";
+      return;
+    }
 
-          const exact = {
-            sin: { 0:"0", 30:"1/2", 45:"√2/2", 60:"√3/2", 90:"1", 120:"√3/2", 135:"√2/2", 150:"1/2", 180:"0", 210:"-1/2", 225:"-√2/2", 240:"-√3/2", 270:"-1", 300:"-√3/2", 315:"-√2/2", 330:"-1/2", 360:"0" },
-            cos: { 0:"1", 30:"√3/2", 45:"√2/2", 60:"1/2", 90:"0", 120:"-1/2", 135:"-√2/2", 150:"-√3/2", 180:"-1", 210:"-√3/2", 225:"-√2/2", 240:"-1/2", 270:"0", 300:"1/2", 315:"√2/2", 330:"√3/2", 360:"1" },
-            tan: { 0:"0", 30:"1/√3", 45:"1", 60:"√3", 120:"-√3", 135:"-1", 150:"-1/√3", 180:"0", 210:"1/√3", 225:"1", 240:"√3", 300:"-√3", 315:"-1", 330:"-1/√3", 360:"0" }
-          };
+    const js = toJS(input);
+    let val = safeEval(js);
 
-          if (fn === "tan" && (angle === 90 || angle === 270)) {
-            display.textContent = "undefined";
-            return;
-          }
+    // ✅ FIX 2: only match FULL trig expression
+    const trimmed = input.replace(/\s+/g, '');
+    const match = trimmed.match(/^(sin|cos|tan)\(([-]?\d+)\)$/);
 
-         if (exact[fn][angle] !== undefined && trimmed === `${fn}(${match[2]})`) {
-  display.textContent = exact[fn][angle];
-  memoryAns = val;
-  return;
-}
-        }
+    if (match) {
+      const fn = match[1];
+      let angle = parseInt(match[2]);
+      angle = ((angle % 360) + 360) % 360;
 
+      const exact = {
+        sin: { 0:"0", 30:"1/2", 45:"√2/2", 60:"√3/2", 90:"1", 120:"√3/2", 135:"√2/2", 150:"1/2", 180:"0", 210:"-1/2", 225:"-√2/2", 240:"-√3/2", 270:"-1", 300:"-√3/2", 315:"-√2/2", 330:"-1/2", 360:"0" },
+        cos: { 0:"1", 30:"√3/2", 45:"√2/2", 60:"1/2", 90:"0", 120:"-1/2", 135:"-√2/2", 150:"-√3/2", 180:"-1", 210:"-√3/2", 225:"-√2/2", 240:"-1/2", 270:"0", 300:"1/2", 315:"√2/2", 330:"√3/2", 360:"1" },
+        tan: { 0:"0", 30:"1/√3", 45:"1", 60:"√3", 120:"-√3", 135:"-1", 150:"-1/√3", 180:"0", 210:"1/√3", 225:"1", 240:"√3", 300:"-√3", 315:"-1", 330:"-1/√3", 360:"0" }
+      };
+
+      if (fn === "tan" && (angle === 90 || angle === 270)) {
+        display.textContent = "undefined";
+        return;
+      }
+
+      if (exact[fn][angle] !== undefined) {
+        display.textContent = exact[fn][angle];
         memoryAns = val;
-
-        // Only decimal for non-trig, no fraction conversion
-        if (Number.isFinite(val)) {
-          display.textContent = parseFloat(val.toFixed(10)).toString();
-        } else {
-          display.textContent = String(val);
-        }
-
-      }catch(e){
-        display.textContent = 'Error';
+        return;
       }
     }
+
+    memoryAns = val;
+
+    if (Number.isFinite(val)) {
+      display.textContent = parseFloat(val.toFixed(10)).toString();
+    } else {
+      display.textContent = String(val);
+    }
+
+  }catch(e){
+    display.textContent = 'Error';
+  }
+}
 
     document.addEventListener('keydown', (e)=>{
       const k = e.key;
