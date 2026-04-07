@@ -122,26 +122,26 @@
 
     // Updated toJS() function to handle implicit multiplication, π, e, %, and functions
     function toJS(expr){
-      return expr
-        .replace(/(\d)(π|e|√|\(|sin|cos|tan|log|ln)/g, '$1*$2')
-        .replace(/(\))(\d|π|e|√|\(|sin|cos|tan|log|ln)/g, '$1*$2')
-        .replace(/√\(/g, 'Math.sqrt(')
-        .replace(/sin\(/g, 'Math.sin(Math.PI/180*')
-        .replace(/cos\(/g, 'Math.cos(Math.PI/180*')
-        .replace(/tan\(/g, 'Math.tan(Math.PI/180*')
-        .replace(/log\(/g, 'Math.log10(')
-        .replace(/ln\(/g, 'Math.log(')
-        .replace(/π/g, 'Math.PI')
-        .replace(/e(?=[^a-zA-Z0-9_])/g, 'Math.E')
-        .replace(/\^/g, '**')
-        .replace(/(\d+)%/g, '($1/100)');
-    }
+  return expr
+    .replace(/(\d)(π|e|√|\(|sin|cos|tan|log|ln)/g, '$1*$2')
+    .replace(/(\))(\d|π|e|√|\(|sin|cos|tan|log|ln)/g, '$1*$2')
+    .replace(/√\(/g, 'Math.sqrt(')
+    .replace(/sin\(([^)]+)\)/g, (_, a) => `Math.sin(Math.PI/180*(${a}))`)
+    .replace(/cos\(([^)]+)\)/g, (_, a) => `Math.cos(Math.PI/180*(${a}))`)
+    .replace(/tan\(([^)]+)\)/g, (_, a) => `Math.tan(Math.PI/180*(${a}))`)
+    .replace(/log\(/g, 'Math.log10(')
+    .replace(/ln\(/g, 'Math.log(')
+    .replace(/π/g, 'Math.PI')
+    .replace(/e(?=[^a-zA-Z0-9_])/g, 'Math.E')
+    .replace(/\^/g, '**')
+    .replace(/(\d+)%/g, '($1/100)');
+}
 
     function safeEval(expr){
       return Function('return (' + expr + ')')();
     }
 
-   function evaluate(){
+  function evaluate(){
   try{
     const input = display.textContent;
     const js = toJS(input);
@@ -151,28 +151,12 @@
     if (match) {
       const fn = match[1];
       let angle = parseInt(match[2]);
-
       angle = ((angle % 360) + 360) % 360;
 
       const exact = {
-        sin: {
-          0:"0", 30:"1/2", 45:"√2/2", 60:"√3/2", 90:"1",
-          120:"√3/2", 135:"√2/2", 150:"1/2", 180:"0",
-          210:"-1/2", 225:"-√2/2", 240:"-√3/2", 270:"-1",
-          300:"-√3/2", 315:"-√2/2", 330:"-1/2", 360:"0"
-        },
-        cos: {
-          0:"1", 30:"√3/2", 45:"√2/2", 60:"1/2", 90:"0",
-          120:"-1/2", 135:"-√2/2", 150:"-√3/2", 180:"-1",
-          210:"-√3/2", 225:"-√2/2", 240:"-1/2", 270:"0",
-          300:"1/2", 315:"√2/2", 330:"√3/2", 360:"1"
-        },
-        tan: {
-          0:"0", 30:"1/√3", 45:"1", 60:"√3",
-          120:"-√3", 135:"-1", 150:"-1/√3",
-          180:"0", 210:"1/√3", 225:"1", 240:"√3",
-          300:"-√3", 315:"-1", 330:"-1/√3", 360:"0"
-        }
+        sin: { 0:"0", 30:"1/2", 45:"√2/2", 60:"√3/2", 90:"1", 120:"√3/2", 135:"√2/2", 150:"1/2", 180:"0", 210:"-1/2", 225:"-√2/2", 240:"-√3/2", 270:"-1", 300:"-√3/2", 315:"-√2/2", 330:"-1/2", 360:"0" },
+        cos: { 0:"1", 30:"√3/2", 45:"√2/2", 60:"1/2", 90:"0", 120:"-1/2", 135:"-√2/2", 150:"-√3/2", 180:"-1", 210:"-√3/2", 225:"-√2/2", 240:"-1/2", 270:"0", 300:"1/2", 315:"√2/2", 330:"√3/2", 360:"1" },
+        tan: { 0:"0", 30:"1/√3", 45:"1", 60:"√3", 120:"-√3", 135:"-1", 150:"-1/√3", 180:"0", 210:"1/√3", 225:"1", 240:"√3", 300:"-√3", 315:"-1", 330:"-1/√3", 360:"0" }
       };
 
       if (fn === "tan" && (angle === 90 || angle === 270)) {
@@ -188,6 +172,18 @@
     }
 
     memoryAns = val;
+
+    // Only show decimal, no fraction conversion for non-trig
+    if (Number.isFinite(val)) {
+      display.textContent = parseFloat(val.toFixed(10)).toString();
+    } else {
+      display.textContent = String(val);
+    }
+
+  }catch(e){
+    display.textContent = 'Error';
+  }
+}
 
     // 🔹 Fraction converter (for ALL other values)
     function toFraction(x) {
