@@ -146,7 +146,7 @@
         const js = toJS(input);
         let val = safeEval(js);
 
-        const match = input.match(/(sin|cos|tan)\(([-]?\d+)\)/);
+        const match = input.match(/^(sin|cos|tan)\(([-]?\d+)\)$/);
         if (match) {
           const fn = match[1];
           let angle = parseInt(match[2]);
