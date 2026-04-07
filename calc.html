@@ -139,14 +139,20 @@
     function safeEval(expr){
       return Function('return (' + expr + ')')();
     }
-
+const input = display.textContent;
+    
+if (/(\d|\))\s+(sin|cos|tan|log|ln|√)/.test(input)) {
+  display.textContent = "Error";
+  return;
+}
     function evaluate(){
       try{
         const input = display.textContent;
         const js = toJS(input);
         let val = safeEval(js);
 
-        const match = input.match(/^(sin|cos|tan)\(([-]?\d+)\)$/);
+        const trimmed = input.replace(/\s+/g, '');
+        const match = trimmed.match(/^(sin|cos|tan)\(([-]?\d+)\)$/);
         if (match) {
           const fn = match[1];
           let angle = parseInt(match[2]);
@@ -163,11 +169,11 @@
             return;
           }
 
-          if (exact[fn][angle] !== undefined) {
-            display.textContent = exact[fn][angle];
-            memoryAns = val;
-            return;
-          }
+         if (exact[fn][angle] !== undefined && trimmed === `${fn}(${match[2]})`) {
+  display.textContent = exact[fn][angle];
+  memoryAns = val;
+  return;
+}
         }
 
         memoryAns = val;
