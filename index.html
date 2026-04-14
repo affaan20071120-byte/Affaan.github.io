@@ -105,12 +105,14 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 <h2>About Me</h2>
 <p class="muted">
 <strong> I'm Mohammed Affaan Delvi — an aspiring Computer Science student who loves coding, problem‑solving and turning ideas into beautiful, working products. I focus on learning fast, building real projects, and improving every day. I love learning more languages and currently I am 18 years old. </strong></p>
+</p>
 </div>
 </section>
 <section id="skills">
 <div class="box">
 <h2>Skills</h2>
 <div class="col">
+<!-- Python -->
 <a class="card" href="https://www.python.org/" target="_blank" rel="noopener">
 <h3 class="titleFlex">
 <img class="logoSVG" src="https://cdn.worldvectorlogo.com/logos/python-5.svg" alt="Python Logo">
@@ -118,6 +120,7 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 </h3>
 <p class="muted"><strong>I have been using Python for 4 years and I have a strong foundation in python with this python I have made 2 projects.Its fun to code with Python.</strong></p>
 </a>
+<!-- MySQL -->
 <a class="card" href="https://www.mysql.com/" target="_blank" rel="noopener">
 <h3 class="titleFlex">
 <img class="logoSVG" src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL Logo">
@@ -125,6 +128,7 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 </h3>
 <p class="muted"><strong>I started learning MySQL in Grade 12 and I have learned to make database based on this and also an interesting fact about this language is that we can connect it with python using mysql-connector from cmd.</strong></p>
 </a>
+<!-- Blender -->
 <a class="card" href="https://www.blender.org/" target="_blank" rel="noopener">
 <h3 class="titleFlex">
 <img class="logoSVG" src="https://cdn.worldvectorlogo.com/logos/blender-2.svg" alt="Blender Logo">
@@ -132,6 +136,7 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 </h3>
 <p class="muted"><strong>I have been using Blender for 6 month and I am still proceeding with this language.It's good for making 3D models. </strong></p>
 </a>
+<!-- CSS3 -->
 <a class="card" href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener">
 <h3 class="titleFlex">
 <img class="logoSVG" src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS3 Logo">
@@ -139,6 +144,7 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 </h3>
 <p class="muted"><strong>I just started learning this now and have already become well used to this programming language. I have undertand its basics and further going to learn more in CSS3. </strong></p>
 </a>
+<!-- HTML -->
 <a class="card" href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener">
 <h3 class="titleFlex">
 <img class="logoSVG" src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML Logo">
@@ -149,6 +155,7 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 </div>
 </div>
 </section>
+<!-- Projects (MAIN BOX) -->
 <section id="projects">
 <div class="box">
 <h2>Projects</h2>
@@ -224,6 +231,7 @@ box-shadow: 0 0 10px rgba(255,43,69,0.4), 0 0 24px rgba(58,160,255,0.25); }
 <strong> Overall Class 10 (CBSE): 86% (Maths: 93%) (Science: 90%) — Currently pursuing Grade 12 (CBSE). </strong></p>
 </div>
 </section>
+<!-- Contact -->
 <section id="contacts">
 <div class="box">
 <h2>Contacts</h2>
@@ -247,6 +255,7 @@ const menu = document.getElementById('menu');
 hb.addEventListener('click', ()=>{
 menu.style.display = (menu.style.display==='flex') ? 'none' : 'flex';
 });
+// Smooth scroll for Contacts
 const contactBtn = document.querySelector('#menu a[href="#contacts"]');
 contactBtn.addEventListener('click', e => {
 e.preventDefault();
@@ -254,18 +263,114 @@ const target = document.getElementById('contacts');
 const navHeight = document.querySelector('nav').offsetHeight;
 const topPos = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
 window.scrollTo({ top: topPos, behavior: 'smooth' });
-menu.style.display = 'none';
+menu.style.display = 'none'; // close hamburger
 });
-// ========== PAYROLL FUNCTION WITH PASSWORD ==========
+// ========== ADD NEW PAYROLL FUNCTION HERE ==========
 function openPayrollSystem() {
 const password = prompt("🔐 Enter Access Code for Payroll System:\n\n[Hint: Personal Code]");
+if (password === null) {
+return; // User cancelled
+}
+// Single password access
 if (password === "Mohammed20071120") {
-window.open('payroll_code/index.html', '_blank');
-} else if (password !== null) {
-alert("❌ Access Denied!\n\nIncorrect password.");
+// Create under construction page in new tab
+const payrollWindow = window.open('', '_blank');
+payrollWindow.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+<title>Payroll Management System - Under Construction</title>
+<style>
+body {
+font-family: Poppins, system-ui, Arial, sans-serif;
+background: radial-gradient(1200px 800px at 20% 10%, rgba(255,60,80,0.10), transparent 70%),
+radial-gradient(1000px 700px at 80% 30%, rgba(58,160,255,0.12), transparent 70%),
+linear-gradient(180deg, #0b0f2a, #2b0d3a);
+color: #e7e8ee;
+padding: 20px;
+margin: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+min-height: 100vh;
+overflow-x: hidden;
+}
+.container {
+max-width: 600px;
+margin: 0 auto;
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.12);
+padding: 40px;
+border-radius: 18px;
+backdrop-filter: blur(6px);
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+text-align: center;
+}
+h1 {
+color: #e7e8ee;
+text-shadow: 0 0 8px rgba(255,43,69,0.7), 0 0 18px rgba(255,43,69,0.5), 0 0 36px rgba(58,160,255,0.3);
+-webkit-text-stroke: 1px rgba(255,43,69,0.3);
+margin-bottom: 30px;
+font-weight: 800;
+}
+.construction-icon {
+font-size: 80px;
+margin: 20px 0;
+animation: bounce 2s infinite;
+}
+@keyframes bounce {
+0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+40% { transform: translateY(-30px); }
+60% { transform: translateY(-15px); }
+}
+.message {
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.12);
+padding: 20px;
+border-radius: 16px;
+margin: 20px 0;
+backdrop-filter: blur(6px);
+}
+.footer {
+margin-top: 30px;
+color: #b7bbd0;
+}
+ul {
+text-align: left;
+display: inline-block;
+color: #b7bbd0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🔐 Payroll Management System</h1>
+<div class="construction-icon">🚧</div>
+<div class="message">
+<h2>🛠️ Under Construction</h2>
+<p>This advanced payroll management system is currently being developed with cutting-edge technologies.</p>
+<p><strong>Coming Soon:</strong></p>
+<ul>
+<li>Employee Database Management</li>
+<li>Automated Salary Calculations</li>
+<li>Advanced Reporting System</li>
+<li>Secure MySQL Integration</li>
+<li>Python-based Backend</li>
+</ul>
+</div>
+<div class="footer">
+<p style="color: #ff2b45;">💻 Developed by Mohammed Affaan Delvi</p>
+<p style="font-size: 12px;">Check back later for the full system release!</p>
+</div>
+</div>
+</body>
+</html>
+`);
+} else {
+alert("❌ Access Denied!\n\nIncorrect password. Contact administrator for access credentials.");
 }
 }
-// ========== END OF PAYROLL FUNCTION ==========
+// ========== END OF NEW PAYROLL FUNCTION ==========
 const c = document.getElementById('stars');
 const ctx = c.getContext('2d');
 let stars = [];
