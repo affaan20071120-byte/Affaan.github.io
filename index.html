@@ -202,28 +202,29 @@ nav{ position:sticky; top:8px; display:flex; justify-content:center }
         </a>
 
         <!-- ========== NEW PAYROLL CARD - ADD THIS HERE ========== -->
-        <a class="card" href="#" onclick="openPayrollSystem(); return false;">
-          <h3 class="titleFlex">
-<svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
-  <rect x="8" y="12" width="48" height="40" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
-  <rect x="12" y="16" width="40" height="6" rx="2" fill="#3b82f6"/>
-  <g fill="#e2e8f0">
-    <rect x="12" y="26" width="16" height="3" rx="1"/>
-    <rect x="12" y="32" width="20" height="3" rx="1"/>
-    <rect x="12" y="38" width="12" height="3" rx="1"/>
-    <rect x="36" y="26" width="16" height="3" rx="1"/>
-    <rect x="36" y="32" width="14" height="3" rx="1"/>
-    <rect x="36" y="38" width="18" height="3" rx="1"/>
-  </g>
-  <circle cx="20" cy="8" r="6" fill="#10b981" stroke="#059669" stroke-width="2"/>
-  <path d="M17 8l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/>
-</svg>
-<span>Payroll Management System</span></h3>
-          <p class="muted"><strong>Advanced employee payroll system with database integration and secure authentication.</strong></p>
-          <span class="btn">Protected Access</span>
-        </a>
-        <!-- ========== END OF NEW PAYROLL CARD ========== -->
-
+<a class="card" href="#" onclick="openPayrollSystem(); return false;">
+  <h3 class="titleFlex">
+    <svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
+      <rect x="8" y="12" width="48" height="40" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="12" y="16" width="40" height="6" rx="2" fill="#3b82f6"/>
+      <g fill="#e2e8f0">
+        <rect x="12" y="26" width="16" height="3" rx="1"/>
+        <rect x="12" y="32" width="20" height="3" rx="1"/>
+        <rect x="12" y="38" width="12" height="3" rx="1"/>
+        <rect x="36" y="26" width="16" height="3" rx="1"/>
+        <rect x="36" y="32" width="14" height="3" rx="1"/>
+        <rect x="36" y="38" width="18" height="3" rx="1"/>
+      </g>
+      <circle cx="20" cy="8" r="6" fill="#10b981" stroke="#059669" stroke-width="2"/>
+      <path d="M17 8l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/>
+    </svg>
+    <span>Payroll Management System</span>
+  </h3>
+  <p class="muted"><strong>Advanced employee payroll system with database integration and secure authentication.</strong></p>
+  <span class="btn">Launch App</span>
+</a>
+<!-- ========== END OF NEW PAYROLL CARD ========== -->
+        
         <a class="card" href="coming-soon.html" target="_blank" rel="noopener">
           <h3 class="titleFlex">
 <svg class="logoSVG" viewBox="0 0 64 64" aria-hidden="true">
@@ -298,99 +299,8 @@ function openPayrollSystem() {
   
   // Single password access
   if (password === "Mohammed20071120") {
-    // Create under construction page in new tab
-    const payrollWindow = window.open('', '_blank');
-    payrollWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Payroll Management System - Under Construction</title>
-        <style>
-          body { 
-            font-family: Poppins, system-ui, Arial, sans-serif; 
-            background: radial-gradient(1200px 800px at 20% 10%, rgba(255,60,80,0.10), transparent 70%),
-                        radial-gradient(1000px 700px at 80% 30%, rgba(58,160,255,0.12), transparent 70%),
-                        linear-gradient(180deg, #0b0f2a, #2b0d3a);
-            color: #e7e8ee; 
-            padding: 20px; 
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-          }
-          .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid rgba(255,255,255,0.12);
-            padding: 40px; 
-            border-radius: 18px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-          }
-          h1 { 
-            color: #e7e8ee; 
-            text-shadow: 0 0 8px rgba(255,43,69,0.7), 0 0 18px rgba(255,43,69,0.5), 0 0 36px rgba(58,160,255,0.3);
-            -webkit-text-stroke: 1px rgba(255,43,69,0.3);
-            margin-bottom: 30px;
-            font-weight: 800;
-          }
-          .construction-icon {
-            font-size: 80px;
-            margin: 20px 0;
-            animation: bounce 2s infinite;
-          }
-          @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-30px); }
-            60% { transform: translateY(-15px); }
-          }
-          .message {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.12);
-            padding: 20px;
-            border-radius: 16px;
-            margin: 20px 0;
-            backdrop-filter: blur(6px);
-          }
-          .footer {
-            margin-top: 30px;
-            color: #b7bbd0;
-          }
-          ul {
-            text-align: left; 
-            display: inline-block;
-            color: #b7bbd0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>🔐 Payroll Management System</h1>
-          <div class="construction-icon">🚧</div>
-          <div class="message">
-            <h2>🛠️ Under Construction</h2>
-            <p>This advanced payroll management system is currently being developed with cutting-edge technologies.</p>
-            <p><strong>Coming Soon:</strong></p>
-            <ul>
-              <li>Employee Database Management</li>
-              <li>Automated Salary Calculations</li>
-              <li>Advanced Reporting System</li>
-              <li>Secure MySQL Integration</li>
-              <li>Python-based Backend</li>
-            </ul>
-          </div>
-          <div class="footer">
-            <p style="color: #ff2b45;">💻 Developed by Mohammed Affaan Delvi</p>
-            <p style="font-size: 12px;">Check back later for the full system release!</p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `);
+    // This line opens your REAL live program in a new tab!
+    window.open('https://ais-pre-mpqgizkrz4m76uwsjz3ht5-239815191709.europe-west3.run.app', '_blank');
   } else {
     alert("❌ Access Denied!\n\nIncorrect password. Contact administrator for access credentials.");
   }
