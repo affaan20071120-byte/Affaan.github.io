@@ -267,17 +267,16 @@ menu.style.display = 'none'; // close hamburger
 });
 // ========== ADD NEW PAYROLL FUNCTION HERE ==========
 function openPayrollSystem() {
-const password = prompt("🔐 Enter Access Code for Payroll System:\n\n[Hint: Personal Code]");
-if (password === null) {
-return; // User cancelled
-}
-// Single password access
-if (password === "Mohammed20071120") {
-// Open the actual payroll system file
-window.open('payroll_code/index.html', '_blank');
-} else {
-alert("❌ Access Denied!\n\nIncorrect password. Contact administrator for access credentials.");
-}
+  const password = prompt("🔐 Enter Access Code for Payroll System:\n\n[Hint: Mohammed20071120]");
+  
+  if (password === null) return; 
+
+  if (password === "Mohammed20071120") {
+    // PASTE YOUR LINK HERE:
+    window.open('https://affaan20071120-byte.github.io/payroll/', '_blank');
+  } else {
+    alert("❌ Access Denied!");
+  }
 }
 // ========== END OF NEW PAYROLL FUNCTION ==========
 const c = document.getElementById('stars');
